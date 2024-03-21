@@ -61,14 +61,11 @@ impl stream_type {
             )
             .await?;
         let last = response.items.last();
-        match last {
-            Some(transaction) => {
-                self.params.from_ledger_state = Some(LedgerStateSelector {
-                    state_version: Some(transaction.state_version + 1),
-                    ..Default::default()
-                });
-            }
-            None => {}
+        if let Some(transaction) = last {
+            self.params.from_ledger_state = Some(LedgerStateSelector {
+                state_version: Some(transaction.state_version + 1),
+                ..Default::default()
+            });
         }
         Ok(response)
     }

@@ -6,7 +6,6 @@ pub mod gateway;
 
 use duplicate::duplicate_item;
 use maybe_async::{must_be_async, must_be_sync};
-use reqwest;
 use serde::Serialize;
 
 #[cfg(feature = "gateway")]

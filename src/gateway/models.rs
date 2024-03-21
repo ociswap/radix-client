@@ -73,23 +73,12 @@ pub enum AggregationLevel {
     Vault,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, Default)]
 pub struct LedgerStateSelector {
     pub state_version: Option<u64>,
     pub timestamp: Option<u64>,
     pub epoch: Option<u64>,
     pub round: Option<u64>,
-}
-
-impl Default for LedgerStateSelector {
-    fn default() -> Self {
-        LedgerStateSelector {
-            state_version: None,
-            timestamp: None,
-            epoch: None,
-            round: None,
-        }
-    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -454,7 +443,7 @@ impl std::fmt::Display for GatewayApiError {
             } => write!(
                 f,
                 "Parsing error: {}: Excerpt: {:#?}",
-                serde_error.to_string(),
+                serde_error,
                 response.chars().take(1000).collect::<String>().to_string()
             ),
             GatewayApiError::ClientError(e) => {
@@ -603,7 +592,7 @@ pub enum Order {
     Desc,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct TransactionStreamOptIns {
     pub raw_hex: bool,
     pub receipt_state_changes: bool,
@@ -616,24 +605,6 @@ pub struct TransactionStreamOptIns {
     pub affected_global_entities: bool,
     pub manifest_instructions: bool,
     pub balance_changes: bool,
-}
-
-impl Default for TransactionStreamOptIns {
-    fn default() -> Self {
-        TransactionStreamOptIns {
-            raw_hex: false,
-            receipt_state_changes: false,
-            receipt_fee_summary: false,
-            receipt_fee_source: false,
-            receipt_fee_destination: false,
-            receipt_costing_parameters: false,
-            receipt_events: false,
-            receipt_output: false,
-            affected_global_entities: false,
-            manifest_instructions: false,
-            balance_changes: false,
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -68,12 +68,9 @@ impl stream_type {
             )
             .await?;
         let last = response.transactions.last();
-        match last {
-            Some(transaction) => {
-                self.from_state_version =
-                    transaction.resultant_state_identifiers.state_version + 1;
-            }
-            None => {}
+        if let Some(transaction) = last {
+            self.from_state_version =
+                transaction.resultant_state_identifiers.state_version + 1;
         }
         Ok(response)
     }

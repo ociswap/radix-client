@@ -501,7 +501,7 @@ impl std::fmt::Display for CoreApiError {
             } => write!(
                 f,
                 "Parsing error: {}: Excerpt: {:#?}",
-                serde_error.to_string(),
+                serde_error,
                 response.chars().take(1000).collect::<String>().to_string()
             ),
             CoreApiError::ClientError(e) => {
