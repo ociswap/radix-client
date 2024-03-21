@@ -1,2 +1,2 @@
 # radix-client
-A hand crafted rust client to interact with the Radix Gateway API
+A hand crafted Rust client to interact with the Radix Gateway API
