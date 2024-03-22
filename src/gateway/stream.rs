@@ -8,7 +8,8 @@ use maybe_async::{must_be_async, must_be_sync};
     stream_type                     client_type ;
     [ TransactionStreamAsync ]      [ GatewayClientAsync ];
     [ TransactionStreamBlocking ]   [ GatewayClientBlocking ];
-  )]
+)]
+#[derive(Debug)]
 pub struct stream_type {
     pub client: client_type,
     pub cursor: Option<String>,
@@ -75,7 +76,7 @@ impl stream_type {
     stream_type                         client_type           maybe_async_attr;
     [ TransactionStreamAsync ]         [ GatewayClientAsync ]    [ must_be_async ];
     [ TransactionStreamBlocking ]      [ GatewayClientBlocking ] [ must_be_sync ];
-  )]
+)]
 impl client_type {
     pub fn new_transaction_stream(
         &self,
