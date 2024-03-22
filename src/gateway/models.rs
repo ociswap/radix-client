@@ -1,5 +1,6 @@
 use std::{error::Error, fmt::Debug};
 
+use chrono::Utc;
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -626,7 +627,7 @@ pub struct CommittedTransactionInfo {
     pub intent_hash: Option<String>,
     pub fee_paid: Option<Decimal>,
     pub affected_global_entities: Option<Vec<EntityReference>>,
-    pub confirmed_at: Option<String>,
+    pub confirmed_at: Option<chrono::DateTime<Utc>>,
     pub error_message: Option<String>,
     pub raw_hex: Option<String>,
     pub receipt: Option<Receipt>,
