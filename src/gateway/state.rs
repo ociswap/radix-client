@@ -70,8 +70,7 @@ impl client_type {
         };
         let (text, status) = self
             .post_request("state/key-value-store/keys", request)
-            .await
-            .unwrap();
+            .await?;
         match_response(text, status)
     }
 
@@ -89,8 +88,7 @@ impl client_type {
         };
         let (text, status) = self
             .post_request("state/key-value-store/data", request)
-            .await
-            .unwrap();
+            .await?;
         match_response(text, status)
     }
 }
