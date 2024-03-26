@@ -95,8 +95,7 @@ impl client_type {
             .header(reqwest::header::USER_AGENT, "reqwest/0.11.0")
             .json(&body)
             .send()
-            .await
-            .unwrap();
+            .await?;
         let status = res.status();
         let text = res.text().await?;
         Ok((text, status))
