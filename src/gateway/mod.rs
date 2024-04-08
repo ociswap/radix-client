@@ -1,9 +1,11 @@
-use self::models::GatewayApiError;
+pub mod error;
 pub mod models;
 pub mod state;
 pub mod status;
 pub mod stream;
-pub mod transactions;
+pub mod transaction;
+
+use self::error::GatewayApiError;
 
 pub fn match_response<T>(
     text: String,
@@ -21,9 +23,14 @@ where
                 }
             })?)
         }
-        status if status.is_server_error() => {
-            Err(GatewayApiError::ServerError(text.to_string()))
-        }
+        status if status.is_server_error() => Err(
+            GatewayApiError::ServerError(serde_json::from_str(&text).map_err(
+                |err| GatewayApiError::Parsing {
+                    serde_error: err,
+                    response: text.clone(),
+                },
+            )?),
+        ),
         status if status.is_client_error() => {
             let body = serde_json::from_str(&text).map_err(|err| {
                 GatewayApiError::Parsing {

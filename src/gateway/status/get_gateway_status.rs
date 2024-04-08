@@ -1,9 +1,7 @@
-use super::match_response;
-use super::models::*;
-use crate::GatewayClientAsync;
-use crate::GatewayClientBlocking;
+use self::gateway::{error::GatewayApiError, match_response, models::*};
+use crate::*;
 use duplicate::duplicate_item;
-use maybe_async::{must_be_async, must_be_sync};
+use maybe_async::*;
 
 #[duplicate_item(
     client_type                 maybe_async_attr ;
@@ -22,16 +20,4 @@ impl client_type {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_gateway_status() {
-        let client = GatewayClientBlocking::new(
-            "https://mainnet.radixdlt.com".to_string(),
-        );
-        let response = client.get_gateway_status().unwrap();
-        println!("{:?}", response);
-    }
-}
+// builder

@@ -1,8 +1,10 @@
+use super::error::CoreApiError;
 use super::match_response;
 use super::models::*;
 use crate::CoreClientAsync;
 use crate::CoreClientBlocking;
 use duplicate::duplicate_item;
+
 use maybe_async::{must_be_async, must_be_sync};
 
 #[duplicate_item(

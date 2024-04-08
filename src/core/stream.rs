@@ -1,3 +1,4 @@
+use super::error::CoreApiError;
 use super::models::*;
 use crate::CoreClientAsync;
 use crate::CoreClientBlocking;

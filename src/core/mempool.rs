@@ -1,3 +1,4 @@
+use super::error::CoreApiError;
 use super::match_response;
 use super::models::*;
 use crate::CoreClientAsync;
@@ -42,8 +43,9 @@ mod tests {
         let request = GetMempoolListRequest {
             network: "mainnet".to_string(),
         };
-        let _ = client
+        let resp = client
             .get_mempool_list(request)
             .expect("Failed to get mempool list");
+        println!("{:?}", resp);
     }
 }

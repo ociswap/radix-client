@@ -1,10 +1,14 @@
 pub mod constants;
 #[cfg(feature = "core")]
 pub mod core;
+pub mod deserialize;
+
+pub mod builder;
 #[cfg(feature = "gateway")]
 pub mod gateway;
 
 use duplicate::duplicate_item;
+use log::trace;
 use maybe_async::{must_be_async, must_be_sync};
 use serde::Serialize;
 
@@ -63,6 +67,7 @@ impl client_type {
             .await?;
         let status = res.status();
         let text = res.text().await?;
+        trace!("Status: {status} - Response: {text}");
         Ok((text, status))
     }
 }
@@ -97,6 +102,7 @@ impl client_type {
             .await?;
         let status = res.status();
         let text = res.text().await?;
+        trace!("Status: {status} - Response: {text}");
         Ok((text, status))
     }
 }

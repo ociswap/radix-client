@@ -86,20 +86,6 @@ pub struct TransactionPreview200ResponseBody {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Core4XXResponseBody {
-    pub message: String,
-    pub code: Option<i16>,
-    pub details: Option<GatewayError>,
-    pub trace_id: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct GatewayError {
-    pub r#type: GatewayErrorType,
-    pub address: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
 pub enum GatewayErrorType {
     EntityNotFoundError,
     InvalidEntityError,
@@ -478,52 +464,6 @@ pub struct TransactionHeader {
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct RoundUpdateLedgerTransaction {
     // pub payload_hex: Option<String>,
-}
-
-pub enum CoreApiError {
-    Network(reqwest::Error),
-    Parsing {
-        serde_error: serde_json::Error,
-        response: String,
-    },
-    ClientError(Core4XXResponseBody),
-    ServerError(String),
-    Unknown,
-}
-
-impl std::fmt::Display for CoreApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            CoreApiError::Network(e) => write!(f, "Network error: {}", e),
-            CoreApiError::Parsing {
-                serde_error,
-                response,
-            } => write!(
-                f,
-                "Parsing error: {}: Excerpt: {:#?}",
-                serde_error,
-                response.chars().take(1000).collect::<String>().to_string()
-            ),
-            CoreApiError::ClientError(e) => {
-                write!(f, "Client error: {:?}", e)
-            }
-            CoreApiError::ServerError(e) => write!(f, "Server error: {}", e),
-            CoreApiError::Unknown => write!(f, "Unknown error"),
-        }
-    }
-}
-
-impl Debug for CoreApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        // Use the Display implementation
-        write!(f, "{}", self)
-    }
-}
-
-impl From<reqwest::Error> for CoreApiError {
-    fn from(e: reqwest::Error) -> Self {
-        CoreApiError::Network(e)
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]

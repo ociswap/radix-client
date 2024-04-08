@@ -1,9 +1,10 @@
-use self::models::CoreApiError;
-
+pub mod error;
 pub mod mempool;
 pub mod models;
 pub mod stream;
 pub mod transactions;
+use self::error::CoreApiError;
+use crate::deserialize::from_str;
 
 pub fn match_response<T>(
     text: String,
@@ -14,16 +15,17 @@ where
 {
     match status {
         reqwest::StatusCode::OK => {
-            Ok(serde_json::from_str(&text).map_err(|err| {
-                CoreApiError::Parsing {
-                    serde_error: err,
-                    response: text.clone(),
-                }
+            Ok(from_str(&text).map_err(|err| CoreApiError::Parsing {
+                response: err.path().to_string(),
+                serde_error: err.into_inner(),
             })?)
         }
-        status if status.is_server_error() => {
-            Err(CoreApiError::ServerError(text.to_string()))
-        }
+        status if status.is_server_error() => Err(CoreApiError::ServerError(
+            from_str(&text).map_err(|err| CoreApiError::Parsing {
+                response: err.path().to_string(),
+                serde_error: err.into_inner(),
+            })?,
+        )),
         status if status.is_client_error() => {
             let body = serde_json::from_str(&text).map_err(|err| {
                 CoreApiError::Parsing {

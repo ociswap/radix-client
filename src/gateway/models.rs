@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Debug};
+use std::fmt::Debug;
 
 use chrono::Utc;
 use rust_decimal::Decimal;
@@ -147,21 +147,31 @@ pub enum PublicKeyType {
     EddsaEd25519,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PublicKey {
     pub key_type: PublicKeyType,
     // The hex-encoded compressed EdDSA Ed25519 public key (32 bytes)
     pub key_hex: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PreviewTransactionFlags {
     pub use_free_credit: bool,
     pub assume_all_signature_proofs: bool,
     pub skip_epoch_check: bool,
 }
 
-#[derive(Serialize, Deserialize)]
+impl Default for PreviewTransactionFlags {
+    fn default() -> Self {
+        PreviewTransactionFlags {
+            use_free_credit: false,
+            assume_all_signature_proofs: false,
+            skip_epoch_check: false,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct TransactionPreviewRequestBody {
     pub manifest: String,
     pub blobs_hex: Option<Vec<String>>,
@@ -181,31 +191,6 @@ pub struct TransactionPreview200ResponseBody {
     pub receipt: Receipt,
     pub resource_changes: Vec<InstructionResourceChanges>,
     pub logs: Vec<Log>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Gateway4XXResponseBody {
-    pub message: String,
-    pub code: Option<i16>,
-    pub details: Option<GatewayError>,
-    pub trace_id: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct GatewayError {
-    pub r#name: GatewayErrorType,
-    pub address: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum GatewayErrorType {
-    EntityNotFoundError,
-    InvalidEntityError,
-    NotSyncedUpError,
-    InvalidRequestError,
-    InvalidTransactionError,
-    TransactionNotFoundError,
-    InternalServerError,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -423,54 +408,6 @@ pub struct StateUpdates {
     pub new_global_entities: Vec<serde_json::Value>, // Assuming it's a list of generic JSON values
 }
 
-pub enum GatewayApiError {
-    Network(reqwest::Error),
-    Parsing {
-        serde_error: serde_json::Error,
-        response: String,
-    },
-    ClientError(Gateway4XXResponseBody),
-    ServerError(String),
-    Unknown,
-}
-
-impl std::fmt::Display for GatewayApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            GatewayApiError::Network(e) => write!(f, "Network error: {}", e),
-            GatewayApiError::Parsing {
-                serde_error,
-                response,
-            } => write!(
-                f,
-                "Parsing error: {}: Excerpt: {:#?}",
-                serde_error,
-                response.chars().take(1000).collect::<String>().to_string()
-            ),
-            GatewayApiError::ClientError(e) => {
-                write!(f, "Client error: {:?}", e)
-            }
-            GatewayApiError::ServerError(e) => write!(f, "Server error: {}", e),
-            GatewayApiError::Unknown => write!(f, "Unknown error"),
-        }
-    }
-}
-
-impl Debug for GatewayApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        // Use the Display implementation
-        write!(f, "{}", self)
-    }
-}
-
-impl Error for GatewayApiError {}
-
-impl From<reqwest::Error> for GatewayApiError {
-    fn from(e: reqwest::Error) -> Self {
-        GatewayApiError::Network(e)
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionSubmitRequestBody {
     pub notarized_transaction_hex: String,
@@ -551,7 +488,7 @@ pub struct TransactionStreamRequestBody {
     pub from_ledger_state: Option<LedgerStateSelector>,
     pub cursor: Option<String>,
     pub limit_per_page: Option<u32>,
-    pub kind_filter: TransactionKindFilter,
+    pub kind_filter: Option<TransactionKindFilter>,
     pub manifest_accounts_withdrawn_from_filter: Option<Vec<String>>,
     pub manifest_accounts_deposited_into_filter: Option<Vec<String>>,
     pub manifest_resources_filter: Option<Vec<String>>,
@@ -569,7 +506,7 @@ impl Default for TransactionStreamRequestBody {
             from_ledger_state: None,
             cursor: None,
             limit_per_page: None,
-            kind_filter: TransactionKindFilter::All,
+            kind_filter: None,
             manifest_accounts_withdrawn_from_filter: None,
             manifest_accounts_deposited_into_filter: None,
             manifest_resources_filter: None,
