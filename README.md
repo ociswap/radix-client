@@ -4,7 +4,11 @@
 
 This crate aims to implement a REST client for consuming [Radix DLT](https://www.radixdlt.com)'s [Core](https://radix-babylon-core-api.redoc.ly) and [Gateway](https://radix-babylon-gateway-api.redoc.ly) APIs. This crate supports both async and blocking use through a blocking and an async client struct.
 
-While the core and gateway API are similar, there are subtle differences between their endpoint names, request schemas and response schemas. That's why they're implemented separately.
+While it is theoretically possible to generate this client from an OpenAPI specification, our experience with the generation of clients from specifications as complex as these, is that the generated code often has issues. In addition to issues with the generation, the available client generators produce less ergonomic clients, which is what lead to this manual implementation.
+
+The core and gateway API are similar, but there are subtle differences between their endpoint names, request schemas and response schemas. That's why they're implemented separately in this crate.
+
+Only a subset of the available endpoints is implemented, but we will implement endpoints as we need them. Community contributions are welcomed as well.
 
 # Example
 
