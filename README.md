@@ -54,3 +54,7 @@ let response = client
     .await
     .unwrap();
 ```
+
+# A note on async/blocking
+
+At the moment, the support for asynchronous programming in Rust is a bit lacking, especially when we want to bridge the gap between async and blocking code. This crate makes use of two macros to achieve an async and a blocking client without straight-up code duplication. We define potentially asynchronous operations to be async, and the `maybe_async` (Which can remove all async/await keywords from a function) crate is then used together with the `duplicate` crate to get one blocking implementation and one asynchronous one. Rust seems hard at work on something called the [Keyword Generics Initiative](https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html), which should fix this issue. Until then, this is a solution.

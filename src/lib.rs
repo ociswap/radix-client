@@ -16,8 +16,7 @@ use serde::Serialize;
     client_type                 reqwest_client_type ;
     [ GatewayClientAsync ]     [ reqwest::Client ];
     [ GatewayClientBlocking ]  [ reqwest::blocking::Client ];
-
-  )]
+)]
 #[derive(Debug, Clone)]
 pub struct client_type {
     pub base_url: String,
@@ -26,10 +25,10 @@ pub struct client_type {
 
 #[cfg(feature = "core")]
 #[duplicate_item(
-    client_type                 reqwest_client_type ;
+    client_type                reqwest_client_type ;
     [ CoreClientAsync ]        [ reqwest::Client ];
     [ CoreClientBlocking ]     [ reqwest::blocking::Client ];
-  )]
+)]
 #[derive(Debug, Clone)]
 pub struct client_type {
     pub base_url: String,
@@ -38,10 +37,10 @@ pub struct client_type {
 
 #[cfg(feature = "gateway")]
 #[duplicate_item(
-    client_type                 reqwest_client_type           maybe_async_attr;
-    [ GatewayClientAsync ]     [ reqwest::Client ]          [ must_be_async ];
+    client_type                reqwest_client_type           maybe_async_attr;
+    [ GatewayClientAsync ]     [ reqwest::Client ]           [ must_be_async ];
     [ GatewayClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ];
-  )]
+)]
 impl client_type {
     pub fn new(base_url: String) -> client_type {
         client_type {
@@ -73,8 +72,8 @@ impl client_type {
 
 #[cfg(feature = "core")]
 #[duplicate_item(
-    client_type                 reqwest_client_type           maybe_async_attr;
-    [ CoreClientAsync ]        [ reqwest::Client ]          [ must_be_async ];
+    client_type                reqwest_client_type           maybe_async_attr;
+    [ CoreClientAsync ]        [ reqwest::Client ]           [ must_be_async ];
     [ CoreClientBlocking ]     [ reqwest::blocking::Client ] [ must_be_sync ];
 )]
 impl client_type {
