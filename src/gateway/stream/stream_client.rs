@@ -1,5 +1,5 @@
-use crate::gateway::builder::AsyncRequestBuilder;
-use crate::gateway::builder::BlockingRequestBuilder;
+use crate::gateway::builder::RequestBuilderAsync;
+use crate::gateway::builder::RequestBuilderBlocking;
 use crate::gateway::error::GatewayApiError;
 use crate::gateway::models::*;
 use crate::GatewayClientAsync;
@@ -14,8 +14,8 @@ use maybe_async::{must_be_async, must_be_sync};
 /// the amount of items in the response will simply be 0.
 #[duplicate_item(
     stream_type                     builder_type ;
-    [ TransactionStreamAsync ]      [ AsyncRequestBuilder ];
-    [ TransactionStreamBlocking ]   [ BlockingRequestBuilder ];
+    [ TransactionStreamAsync ]      [ RequestBuilderAsync ];
+    [ TransactionStreamBlocking ]   [ RequestBuilderBlocking ];
 )]
 #[derive(Debug)]
 pub struct stream_type<'a> {

@@ -1,5 +1,5 @@
 use self::gateway::{
-    builder::{AsyncRequestBuilder, BlockingRequestBuilder},
+    builder::{RequestBuilderAsync, RequestBuilderBlocking},
     error::GatewayApiError,
     match_response,
     models::*,
@@ -32,8 +32,8 @@ impl client_type {
 
 #[duplicate_item(
     request_type client_type ;
-    [ AsyncRequestBuilder ] [ GatewayClientAsync ] ;
-    [ BlockingRequestBuilder ] [ GatewayClientBlocking ] ;
+    [ RequestBuilderAsync ] [ GatewayClientAsync ] ;
+    [ RequestBuilderBlocking ] [ GatewayClientBlocking ] ;
 )]
 impl client_type {
     pub fn get_keyvaluestore_data_builder(
@@ -54,8 +54,8 @@ impl client_type {
 
 #[duplicate_item(
     builder_type maybe_async_attr;
-    [ AsyncRequestBuilder ] [ must_be_async ];
-    [ BlockingRequestBuilder ] [ must_be_sync ];
+    [ RequestBuilderAsync ] [ must_be_async ];
+    [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
 impl builder_type<'_, GetKeyValueStoreDataRequestBody> {
     pub fn with_keys(
