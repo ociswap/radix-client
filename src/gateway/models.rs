@@ -55,7 +55,7 @@ pub struct StateEntityDetailsResponseItemDetailsComponent {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-// Left this empty, don't need it yet.
+// Left this empty, did not need it yet.
 pub struct StateEntityDetailsRequestOptIns {}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -84,7 +84,7 @@ pub struct LedgerStateSelector {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StateEntityFungiblesPageRequestOptIns {
-    explicit_metadata: Vec<String>,
+    pub explicit_metadata: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -437,8 +437,14 @@ pub struct GetKeyValueStoreKeys200ResponseBody {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StateKeyValueStoreKeysResponseItem {
-    pub key: serde_json::Value,
+    pub key: ScryptoSborValue,
     pub last_updated_at_state_version: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ScryptoSborValue {
+    pub raw_hex: String,
+    pub programmatic_json: serde_json::Value,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

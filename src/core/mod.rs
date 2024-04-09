@@ -1,8 +1,10 @@
+pub mod builder;
 pub mod error;
 pub mod mempool;
 pub mod models;
 pub mod stream;
-pub mod transactions;
+pub mod transaction;
+
 use self::error::CoreApiError;
 use crate::deserialize::from_str;
 

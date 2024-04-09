@@ -4,13 +4,13 @@ use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Default, Serialize)]
-pub struct GetMempoolTransactionsRequest {
+pub struct GetMempoolTransactionRequest {
     pub network: String,
     pub payload_hashes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Default)]
-pub struct GetMempoolTransactions200Response {
+pub struct GetMempoolTransaction200Response {
     pub count: u32,
     pub payloads: Vec<MempoolTransactionPayloads>,
 }
@@ -48,21 +48,31 @@ pub enum PublicKeyType {
     EddsaEd25519,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PublicKey {
     pub key_type: PublicKeyType,
     // The hex-encoded compressed EdDSA Ed25519 public key (32 bytes)
     pub key_hex: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PreviewTransactionFlags {
     pub use_free_credit: bool,
     pub assume_all_signature_proofs: bool,
     pub skip_epoch_check: bool,
 }
 
-#[derive(Serialize, Deserialize)]
+impl Default for PreviewTransactionFlags {
+    fn default() -> Self {
+        PreviewTransactionFlags {
+            use_free_credit: false,
+            assume_all_signature_proofs: false,
+            skip_epoch_check: false,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct TransactionPreviewRequestBody {
     pub network: String,
     pub manifest: String,
@@ -337,15 +347,15 @@ pub struct TransactionSubmitRequestBody {
     pub notarized_transaction_hex: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
-pub struct TransactionStreamRequestBody {
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct GetCommittedTransactionsRequest {
     pub network: String,
     pub from_state_version: u64,
     pub limit: u32,
-    pub sbor_format_options: SborFormatOptions,
-    pub transaction_format_options: TransactionFormatOptions,
-    pub substate_format_options: SubstateFormatOptions,
-    pub include_proofs: bool,
+    pub sbor_format_options: Option<SborFormatOptions>,
+    pub transaction_format_options: Option<TransactionFormatOptions>,
+    pub substate_format_options: Option<SubstateFormatOptions>,
+    pub include_proofs: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]

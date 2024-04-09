@@ -3,6 +3,7 @@ use self::{
     gateway::{error::GatewayApiError, match_response, models::*},
 };
 use crate::*;
+use chrono::Utc;
 use duplicate::duplicate_item;
 use maybe_async::*;
 
@@ -67,11 +68,35 @@ impl builder_type<'_, StateEntityDetailsRequest> {
         self
     }
 
-    pub fn at_ledger_state(
-        mut self,
-        at_ledger_state: LedgerStateSelector,
-    ) -> Self {
-        self.request.at_ledger_state = Some(at_ledger_state);
+    pub fn at_state_version(&mut self, value: u64) -> &mut Self {
+        self.request.at_ledger_state = Some(LedgerStateSelector {
+            state_version: Some(value),
+            ..Default::default()
+        });
+        self
+    }
+
+    pub fn at_timestamp(&mut self, value: chrono::DateTime<Utc>) -> &mut Self {
+        self.request.at_ledger_state = Some(LedgerStateSelector {
+            timestamp: Some(value.timestamp() as u64),
+            ..Default::default()
+        });
+        self
+    }
+
+    pub fn at_epoch(&mut self, value: u64) -> &mut Self {
+        self.request.at_ledger_state = Some(LedgerStateSelector {
+            epoch: Some(value),
+            ..Default::default()
+        });
+        self
+    }
+
+    pub fn at_round(&mut self, value: u64) -> &mut Self {
+        self.request.at_ledger_state = Some(LedgerStateSelector {
+            round: Some(value),
+            ..Default::default()
+        });
         self
     }
 
