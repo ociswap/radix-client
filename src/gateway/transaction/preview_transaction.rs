@@ -1,6 +1,8 @@
-use self::{
+use self::gateway::{
     builder::{AsyncRequestBuilder, BlockingRequestBuilder},
-    gateway::{error::GatewayApiError, match_response, models::*},
+    error::GatewayApiError,
+    match_response,
+    models::*,
 };
 use crate::*;
 use duplicate::duplicate_item;

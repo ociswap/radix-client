@@ -3,7 +3,6 @@ pub mod constants;
 pub mod core;
 pub mod deserialize;
 
-pub mod builder;
 #[cfg(feature = "gateway")]
 pub mod gateway;
 

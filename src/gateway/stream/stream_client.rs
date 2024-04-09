@@ -1,5 +1,5 @@
-use crate::builder::AsyncRequestBuilder;
-use crate::builder::BlockingRequestBuilder;
+use crate::gateway::builder::AsyncRequestBuilder;
+use crate::gateway::builder::BlockingRequestBuilder;
 use crate::gateway::error::GatewayApiError;
 use crate::gateway::models::*;
 use crate::GatewayClientAsync;

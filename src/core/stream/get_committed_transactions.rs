@@ -1,6 +1,8 @@
-use self::{
+use self::core::{
     builder::{AsyncRequestBuilder, BlockingRequestBuilder},
-    core::{error::CoreApiError, match_response, models::*},
+    error::CoreApiError,
+    match_response,
+    models::*,
 };
 use crate::*;
 use duplicate::duplicate_item;
@@ -8,8 +10,8 @@ use maybe_async::*;
 
 #[duplicate_item(
     client_type                 maybe_async_attr ;
-    [ GatewayClientAsync ]     [ must_be_async ];
-    [ GatewayClientBlocking ]  [ must_be_sync ];
+    [ CoreClientAsync ]     [ must_be_async ];
+    [ CoreClientBlocking ]  [ must_be_sync ];
   )]
 impl client_type {
     #[maybe_async_attr]
@@ -37,8 +39,8 @@ impl client_type {
 
 #[duplicate_item(
     request_type client_type ;
-    [ AsyncRequestBuilder ] [ GatewayClientAsync ] ;
-    [ BlockingRequestBuilder ] [ GatewayClientBlocking ] ;
+    [ AsyncRequestBuilder ] [ CoreClientAsync ] ;
+    [ BlockingRequestBuilder ] [ CoreClientBlocking ] ;
 )]
 impl client_type {
     pub fn get_committed_transactions_builder(
