@@ -10,14 +10,15 @@ The core and gateway API are similar, but there are subtle differences between t
 
 Only a subset of the available endpoints is implemented, but we will implement endpoints as we need them. Community contributions are welcomed as well.
 
-# Example
+# Blocking example
 
 ```Rust
-// Use either the blocking or non-blocking client from the client module
-use radix_clients::GatewayClientBlocking;
+// Use a blocking client
+use radix_client::GatewayClientBlocking;
 
 // Instantiate a new client with a base URL
 let client = GatewayClientBlocking::new(
+    // or use radix_client::constants::PUBLIC_GATEWAY_URL
     "https://mainnet.radixdlt.com".to_string(),
 );
 
@@ -28,5 +29,28 @@ let response = client
     .limit_per_page(10)
     .with_raw_hex()
     .execute()
+    .unwrap();
+```
+
+# Async example
+
+```Rust
+// Use an async client
+use radix_client::GatewayClientAsync;
+
+// Instantiate a new client with a base URL
+let client = GatewayClientAsync::new(
+    // or use radix_client::constants::PUBLIC_GATEWAY_URL
+    "https://mainnet.radixdlt.com".to_string(),
+);
+
+// Use a builder pattern to create and execute the request
+let response = client
+    .get_transactions_stream_builder()
+    .order(Order::Asc)
+    .limit_per_page(10)
+    .with_raw_hex()
+    .execute()
+    .await
     .unwrap();
 ```
