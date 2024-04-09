@@ -1,5 +1,9 @@
 use crate::{GatewayClientAsync, GatewayClientBlocking};
 
+/// Request builders. These are specialized for async and blocking clients.
+/// They store the client and the request body, and the builder setters
+/// are implemented on them.
+
 #[derive(Debug, Clone)]
 pub struct RequestBuilderAsync<'a, R> {
     pub client: &'a GatewayClientAsync,
