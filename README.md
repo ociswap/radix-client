@@ -2,7 +2,7 @@
 
 ## A hand crafted Rust client to interact with the Radix Gateway & Core APIs
 
-This crate aims to implement a REST client for consuming [Radix DLT](https://www.radixdlt.com)'s [Core](https://radix-babylon-core-api.redoc.ly) and [Gateway](https://radix-babylon-gateway-api.redoc.ly) APIs. It crate supports both async and blocking use.
+This crate aims to implement a REST client for consuming [Radix DLT](https://www.radixdlt.com)'s [Core](https://radix-babylon-core-api.redoc.ly) and [Gateway](https://radix-babylon-gateway-api.redoc.ly) APIs. This crate supports both async and blocking use through a blocking and an async client struct.
 
 While the core and gateway API are similar, there are subtle differences between their endpoint names, request schemas and response schemas. That's why they're implemented separately.
 
@@ -17,13 +17,12 @@ let client = GatewayClientBlocking::new(
     "https://mainnet.radixdlt.com".to_string(),
 );
 
-let response = client.get_state_entity_fungibles_page(
-    None,
-    None,
-    None,
-    "pool_rdx1c5shqw3yq5s7l6tr2k9h9k68cqsju9upr2wq5672rw5gt6y5s6rypj"
-        .to_string(),
-    None,
-    None,
-).unwrap();
+// Use a builder pattern to create and execute the request
+let response = client
+    .get_transactions_stream_builder()
+    .order(Order::Asc)
+    .limit_per_page(10)
+    .with_raw_hex()
+    .execute()
+    .unwrap();
 ```

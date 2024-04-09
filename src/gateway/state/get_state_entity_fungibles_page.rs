@@ -129,3 +129,22 @@ impl builder_type<'_, StateEntityFungiblesPageRequest> {
             .await
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{constants::PUBLIC_GATEWAY_URL, GatewayClientBlocking};
+
+    #[test]
+    fn test_get_state_entity_fungibles_page_builder() {
+        let client = GatewayClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
+        let response = client
+            .get_state_entity_fungibles_page_builder
+            ("component_rdx1cz89w3ecvh9jvdd892vycs44rr042lteg75zgdydq9csn5d87snvdw")
+            .at_state_version(50_000_000)
+            .limit_per_page(1)
+            .execute();
+
+        println!("{:?}", response);
+        assert!(response.is_ok());
+    }
+}
