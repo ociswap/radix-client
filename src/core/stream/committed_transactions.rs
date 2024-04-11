@@ -15,12 +15,11 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_committed_transactions(
+    pub async fn committed_transactions(
         &self,
         request: GetCommittedTransactionsRequest,
     ) -> Result<GetCommittedTransactionsRequest, CoreApiError> {
-        let (text, status) =
-            self.post_request("stream/transactions", request).await?;
+        let (text, status) = self.post("stream/transactions", request).await?;
         match_response(text, status)
     }
 }
@@ -43,7 +42,7 @@ impl client_type {
     [ RequestBuilderBlocking ] [ CoreClientBlocking ] ;
 )]
 impl client_type {
-    pub fn get_committed_transactions_builder(
+    pub fn committed_transactions_builder(
         &self,
         network: String,
         from_state_version: u64,
@@ -98,11 +97,11 @@ impl builder_type<'_, GetCommittedTransactionsRequest> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
     ) -> Result<GetCommittedTransactionsRequest, CoreApiError> {
         self.client
-            .get_committed_transactions(self.request.clone())
+            .committed_transactions(self.request.clone())
             .await
     }
 }

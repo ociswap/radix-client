@@ -10,12 +10,16 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_mempool_list(
+    pub async fn mempool_transaction(
         &self,
         network: String,
-    ) -> Result<GetMempoolList200Response, CoreApiError> {
-        let request = GetMempoolListRequest { network };
-        let (text, status) = self.post_request("mempool/list", request).await?;
+        payload_hashes: Vec<String>,
+    ) -> Result<GetMempoolTransaction200Response, CoreApiError> {
+        let request = GetMempoolTransactionRequest {
+            network,
+            payload_hashes,
+        };
+        let (text, status) = self.post("mempool/transaction", request).await?;
         match_response(text, status)
     }
 }

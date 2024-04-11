@@ -38,7 +38,7 @@ impl<'a> stream_type<'a> {
             panic!("from_state_version must be greater than 0");
         }
         let builder = client
-            .get_transactions_stream_builder()
+            .transactions_stream_builder()
             .from_state_version(from_state_version)
             .order(Order::Asc)
             .kind_filter(TransactionKindFilter::User)
@@ -55,7 +55,7 @@ impl<'a> stream_type<'a> {
     pub async fn next(
         &mut self,
     ) -> Result<TransactionStream200ResponseBody, GatewayApiError> {
-        let response = self.builder.execute().await?;
+        let response = self.builder.fetch().await?;
 
         let last = response.items.last();
         if let Some(transaction) = last {

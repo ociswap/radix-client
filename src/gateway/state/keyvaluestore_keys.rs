@@ -16,13 +16,12 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_state_entity_fungibles_page(
+    pub async fn keyvaluestore_keys(
         &self,
-        request: StateEntityFungiblesPageRequest,
-    ) -> Result<StateEntityFungiblesPage200Response, GatewayApiError> {
-        let (text, status) = self
-            .post_request("state/entity/page/fungibles", request)
-            .await?;
+        request: GetKeyValueStoreKeysRequestBody,
+    ) -> Result<GetKeyValueStoreKeys200ResponseBody, GatewayApiError> {
+        let (text, status) =
+            self.post("state/key-value-store/keys", request).await?;
         match_response(text, status)
     }
 }
@@ -35,17 +34,15 @@ impl client_type {
     [ RequestBuilderBlocking ] [ GatewayClientBlocking ] ;
 )]
 impl client_type {
-    pub fn get_state_entity_fungibles_page_builder(
+    pub fn keyvaluestore_keys_builder(
         &self,
-        entity_address: &str,
-    ) -> request_type<StateEntityFungiblesPageRequest> {
-        let request = StateEntityFungiblesPageRequest {
-            address: entity_address.to_string(),
+        key_value_store_address: &str,
+    ) -> request_type<GetKeyValueStoreKeysRequestBody> {
+        let request = GetKeyValueStoreKeysRequestBody {
             at_ledger_state: None,
+            key_value_store_address: key_value_store_address.to_string(),
             cursor: None,
             limit_per_page: None,
-            aggregation_level: None,
-            opt_ins: None,
         };
         request_type {
             client: &self,
@@ -59,25 +56,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, StateEntityFungiblesPageRequest> {
-    pub fn aggregation_level(
-        &mut self,
-        aggregation_level: AggregationLevel,
-    ) -> &mut Self {
-        self.request.aggregation_level = Some(aggregation_level);
-        self
-    }
-
-    pub fn with_explicit_metadata(
-        &mut self,
-        properties: Vec<String>,
-    ) -> &mut Self {
-        self.request.opt_ins = Some(StateEntityFungiblesPageRequestOptIns {
-            explicit_metadata: properties,
-        });
-        self
-    }
-
+impl builder_type<'_, GetKeyValueStoreKeysRequestBody> {
     pub fn cursor(&mut self, value: String) -> &mut Self {
         self.request.cursor = Some(value);
         self
@@ -121,30 +100,9 @@ impl builder_type<'_, StateEntityFungiblesPageRequest> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
-    ) -> Result<StateEntityFungiblesPage200Response, GatewayApiError> {
-        self.client
-            .get_state_entity_fungibles_page(self.request.clone())
-            .await
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::{constants::PUBLIC_GATEWAY_URL, GatewayClientBlocking};
-
-    #[test]
-    fn test_get_state_entity_fungibles_page_builder() {
-        let client = GatewayClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
-        let response = client
-            .get_state_entity_fungibles_page_builder
-            ("component_rdx1cz89w3ecvh9jvdd892vycs44rr042lteg75zgdydq9csn5d87snvdw")
-            .at_state_version(50_000_000)
-            .limit_per_page(1)
-            .execute();
-
-        println!("{:?}", response);
-        assert!(response.is_ok());
+    ) -> Result<GetKeyValueStoreKeys200ResponseBody, GatewayApiError> {
+        self.client.keyvaluestore_keys(self.request.clone()).await
     }
 }

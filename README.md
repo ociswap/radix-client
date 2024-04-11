@@ -22,13 +22,13 @@ let client = GatewayClientBlocking::new(
     "https://mainnet.radixdlt.com".to_string(),
 );
 
-// Use a builder pattern to create and execute the request
+// Use a builder pattern to create and fetch the request
 let response = client
-    .get_transactions_stream_builder()
+    .transactions_stream_builder()
     .order(Order::Asc)
     .limit_per_page(10)
     .with_raw_hex()
-    .execute()
+    .fetch()
     .unwrap();
 ```
 
@@ -44,16 +44,20 @@ let client = GatewayClientAsync::new(
     "https://mainnet.radixdlt.com".to_string(),
 );
 
-// Use a builder pattern to create and execute the request
+// Use a builder pattern to create and fetch the request
 let response = client
-    .get_transactions_stream_builder()
+    .transactions_stream_builder()
     .order(Order::Asc)
     .limit_per_page(10)
     .with_raw_hex()
-    .execute()
+    .fetch()
     .await
     .unwrap();
 ```
+
+## Not all endpoints have builders
+
+Some endpoints are very easy to query, because they only need just one parameter or even none. For these endpoints, no builder is implemented and you would simply call the method with the endpoint name without a ..builder suffix. There is also no need to call `fetch()` in this case.
 
 # A note on async/blocking
 

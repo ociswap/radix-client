@@ -1,1 +1,1 @@
-pub mod get_gateway_status;
+pub mod gateway_status;

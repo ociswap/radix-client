@@ -17,8 +17,7 @@ impl client_type {
         let body = TransactionSubmitRequestBody {
             notarized_transaction_hex,
         };
-        let (text, status) =
-            self.post_request("transaction/submit", body).await?;
+        let (text, status) = self.post("transaction/submit", body).await?;
         match_response(text, status)
     }
 }

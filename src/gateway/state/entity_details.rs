@@ -16,12 +16,11 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_entity_details(
+    pub async fn entity_details(
         &self,
         request: StateEntityDetailsRequest,
     ) -> Result<StateEntityDetails200Response, GatewayApiError> {
-        let (text, status) =
-            self.post_request("state/entity/details", request).await?;
+        let (text, status) = self.post("state/entity/details", request).await?;
         match_response(text, status)
     }
 }
@@ -34,7 +33,7 @@ impl client_type {
     [ RequestBuilderBlocking ] [ GatewayClientBlocking ] ;
 )]
 impl client_type {
-    pub fn get_entity_details_builder(
+    pub fn entity_details_builder(
         &self,
         addresses: Vec<String>,
     ) -> request_type<StateEntityDetailsRequest> {
@@ -62,11 +61,6 @@ impl builder_type<'_, StateEntityDetailsRequest> {
         aggregation_level: AggregationLevel,
     ) -> Self {
         self.request.aggregation_level = Some(aggregation_level);
-        self
-    }
-
-    pub fn opt_ins(mut self, opt_ins: StateEntityDetailsRequestOptIns) -> Self {
-        self.request.opt_ins = Some(opt_ins);
         self
     }
 
@@ -103,9 +97,9 @@ impl builder_type<'_, StateEntityDetailsRequest> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
     ) -> Result<StateEntityDetails200Response, GatewayApiError> {
-        self.client.get_entity_details(self.request.clone()).await
+        self.client.entity_details(self.request.clone()).await
     }
 }

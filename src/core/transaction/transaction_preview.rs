@@ -19,8 +19,7 @@ impl client_type {
         &self,
         request: TransactionPreviewRequestBody,
     ) -> Result<TransactionPreview200ResponseBody, CoreApiError> {
-        let (text, status) =
-            self.post_request("transaction/preview", request).await?;
+        let (text, status) = self.post("transaction/preview", request).await?;
         match_response(text, status)
     }
 }
@@ -103,7 +102,7 @@ impl builder_type<'_, TransactionPreviewRequestBody> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
     ) -> Result<TransactionPreview200ResponseBody, CoreApiError> {
         self.client.transaction_preview(self.request.clone()).await

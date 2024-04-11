@@ -16,12 +16,11 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_transactions_stream(
+    pub async fn transactions_stream(
         &self,
         request: TransactionStreamRequestBody,
     ) -> Result<TransactionStream200ResponseBody, GatewayApiError> {
-        let (text, status) =
-            self.post_request("stream/transactions", request).await?;
+        let (text, status) = self.post("stream/transactions", request).await?;
         match_response(text, status)
     }
 }
@@ -34,7 +33,7 @@ impl client_type {
     [ RequestBuilderBlocking ] [ GatewayClientBlocking ] ;
 )]
 impl client_type {
-    pub fn get_transactions_stream_builder(
+    pub fn transactions_stream_builder(
         &self,
     ) -> request_type<TransactionStreamRequestBody> {
         let request = TransactionStreamRequestBody {
@@ -184,169 +183,96 @@ impl builder_type<'_, TransactionStreamRequestBody> {
     //     pub balance_changes: bool,
     // }
 
-    pub fn with_raw_hex(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.raw_hex = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.raw_hex = true;
-                Some(opt_ins)
-            }
-        };
+    /// Helper function to update the opt_ins field
+    /// with less boilerplate code in each setter.
+    fn update_opt_ins(
+        &mut self,
+        function: fn(TransactionStreamOptIns) -> TransactionStreamOptIns,
+    ) -> &mut Self {
+        self.request.opt_ins = self
+            .request
+            .opt_ins
+            .clone()
+            .or(Some(TransactionStreamOptIns::default()))
+            .map(function);
         self
+    }
+
+    pub fn with_raw_hex(&mut self) -> &mut Self {
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.raw_hex = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_state_changes(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_state_changes = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_state_changes = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_state_changes = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_fee_summary(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_fee_summary = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_fee_summary = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_fee_summary = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_fee_source(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_fee_source = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_fee_source = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_fee_source = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_fee_destination(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_fee_destination = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_fee_destination = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_fee_destination = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_costing_parameters(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_costing_parameters = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_costing_parameters = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_costing_parameters = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_events(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_events = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_events = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_events = true;
+            opt_ins
+        })
     }
 
     pub fn with_receipt_output(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.receipt_output = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.receipt_output = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.receipt_output = true;
+            opt_ins
+        })
     }
 
     pub fn with_affected_global_entities(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.affected_global_entities = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.affected_global_entities = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.affected_global_entities = true;
+            opt_ins
+        })
     }
 
     pub fn with_manifest_instructions(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.manifest_instructions = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.manifest_instructions = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.manifest_instructions = true;
+            opt_ins
+        })
     }
 
     pub fn with_balance_changes(&mut self) -> &mut Self {
-        self.request.opt_ins = match self.request.opt_ins.clone() {
-            Some(mut opt_ins) => {
-                opt_ins.balance_changes = true;
-                Some(opt_ins)
-            }
-            None => {
-                let mut opt_ins = TransactionStreamOptIns::default();
-                opt_ins.balance_changes = true;
-                Some(opt_ins)
-            }
-        };
-        self
+        self.update_opt_ins(|mut opt_ins| {
+            opt_ins.balance_changes = true;
+            opt_ins
+        })
     }
 
     pub fn order(&mut self, value: Order) -> &mut Self {
@@ -360,12 +286,10 @@ impl builder_type<'_, TransactionStreamRequestBody> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
     ) -> Result<TransactionStream200ResponseBody, GatewayApiError> {
-        self.client
-            .get_transactions_stream(self.request.clone())
-            .await
+        self.client.transactions_stream(self.request.clone()).await
     }
 }
 
@@ -377,11 +301,11 @@ mod tests {
     fn simple_stream_request() {
         let client = GatewayClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
         let response = client
-            .get_transactions_stream_builder()
-            .order(crate::gateway::stream::get_transactions_stream::Order::Asc)
+            .transactions_stream_builder()
+            .order(crate::gateway::stream::transactions_stream::Order::Asc)
             .limit_per_page(1)
             .with_raw_hex()
-            .execute()
+            .fetch()
             .unwrap();
         println!("{response:?}");
     }

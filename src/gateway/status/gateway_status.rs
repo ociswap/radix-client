@@ -10,14 +10,12 @@ use maybe_async::*;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_gateway_status(
+    pub async fn gateway_status(
         &self,
     ) -> Result<GetGatewayStatus200Response, GatewayApiError> {
         let (text, status) = self
-            .post_request("status/gateway-status", serde_json::Value::Null)
+            .post("status/gateway-status", serde_json::Value::Null)
             .await?;
         match_response(text, status)
     }
 }
-
-// builder

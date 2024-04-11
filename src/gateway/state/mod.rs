@@ -1,4 +1,4 @@
-pub mod get_entity_details;
-pub mod get_keyvaluestore_data;
-pub mod get_keyvaluestore_keys;
-pub mod get_state_entity_fungibles_page;
+pub mod entity_details;
+pub mod keyvaluestore_data;
+pub mod keyvaluestore_keys;
+pub mod state_entity_fungibles_page;

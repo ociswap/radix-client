@@ -1,2 +1,2 @@
-pub mod get_mempool_list;
-pub mod get_mempool_transaction;
+pub mod mempool_list;
+pub mod mempool_transaction;

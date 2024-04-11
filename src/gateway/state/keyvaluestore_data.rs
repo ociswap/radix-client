@@ -17,13 +17,12 @@ use serde_json::Value;
   )]
 impl client_type {
     #[maybe_async_attr]
-    pub async fn get_keyvaluestore_data(
+    pub async fn keyvaluestore_data(
         &self,
         request: GetKeyValueStoreDataRequestBody,
     ) -> Result<GetKeyValueStoreData200ResponseBody, GatewayApiError> {
-        let (text, status) = self
-            .post_request("state/key-value-store/data", request)
-            .await?;
+        let (text, status) =
+            self.post("state/key-value-store/data", request).await?;
         match_response(text, status)
     }
 }
@@ -36,7 +35,7 @@ impl client_type {
     [ RequestBuilderBlocking ] [ GatewayClientBlocking ] ;
 )]
 impl client_type {
-    pub fn get_keyvaluestore_data_builder(
+    pub fn keyvaluestore_data_builder(
         &self,
         key_value_store_address: String,
     ) -> request_type<GetKeyValueStoreDataRequestBody> {
@@ -119,12 +118,10 @@ impl builder_type<'_, GetKeyValueStoreDataRequestBody> {
     }
 
     #[maybe_async_attr]
-    pub async fn execute(
+    pub async fn fetch(
         &self,
     ) -> Result<GetKeyValueStoreData200ResponseBody, GatewayApiError> {
-        self.client
-            .get_keyvaluestore_data(self.request.clone())
-            .await
+        self.client.keyvaluestore_data(self.request.clone()).await
     }
 }
 
@@ -133,21 +130,21 @@ mod tests {
     use crate::{constants::PUBLIC_GATEWAY_URL, GatewayClientBlocking};
 
     #[test]
-    fn test_get_keyvaluestore_data() {
+    fn test_keyvaluestore_data() {
         let client = GatewayClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
         let kvs_address = "internal_keyvaluestore_rdx1kp9qamy3m54cxhple4npsal58x7rur6ev5w2me6ne6zfr47lp6h4cp".to_string();
         let key = client
-            .get_keyvaluestore_keys_builder(&kvs_address)
+            .keyvaluestore_keys_builder(&kvs_address)
             .at_state_version(50_000_000)
             .limit_per_page(1)
-            .execute()
+            .fetch()
             .unwrap();
         let hex_key = key.items.first().unwrap().key.clone().raw_hex;
 
         let response = client
-            .get_keyvaluestore_data_builder(kvs_address)
+            .keyvaluestore_data_builder(kvs_address)
             .add_key_hex(&hex_key)
-            .execute();
+            .fetch();
 
         println!("{:?}", response);
     }

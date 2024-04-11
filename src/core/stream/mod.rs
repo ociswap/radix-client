@@ -1,1 +1,1 @@
-pub mod get_committed_transactions;
+pub mod committed_transactions;

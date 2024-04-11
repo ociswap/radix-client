@@ -50,7 +50,7 @@ impl client_type {
     }
 
     #[maybe_async_attr]
-    pub async fn post_request<S: Serialize>(
+    pub async fn post<S: Serialize>(
         &self,
         path: &str,
         body: S,
@@ -85,7 +85,7 @@ impl client_type {
     }
 
     #[maybe_async_attr]
-    pub async fn post_request<S: Serialize>(
+    pub async fn post<S: Serialize>(
         &self,
         path: &str,
         body: S,
