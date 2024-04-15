@@ -55,7 +55,7 @@ impl client_type {
             ..Default::default()
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -66,7 +66,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, GetCommittedTransactionsRequest> {
+impl builder_type<GetCommittedTransactionsRequest> {
     pub fn sbor_format_options(
         &mut self,
         value: SborFormatOptions,

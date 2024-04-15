@@ -45,7 +45,7 @@ impl client_type {
             limit_per_page: None,
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -56,7 +56,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, GetKeyValueStoreKeysRequestBody> {
+impl builder_type<GetKeyValueStoreKeysRequestBody> {
     pub fn cursor(&mut self, value: String) -> &mut Self {
         self.request.cursor = Some(value);
         self

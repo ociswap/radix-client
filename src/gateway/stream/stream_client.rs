@@ -18,9 +18,9 @@ use maybe_async::{must_be_async, must_be_sync};
     [ TransactionStreamBlocking ]   [ RequestBuilderBlocking ];
 )]
 #[derive(Debug)]
-pub struct stream_type<'a> {
+pub struct stream_type {
     pub cursor: Option<String>,
-    pub builder: builder_type<'a, TransactionStreamRequestBody>,
+    pub builder: builder_type<TransactionStreamRequestBody>,
 }
 
 #[duplicate_item(
@@ -28,12 +28,12 @@ pub struct stream_type<'a> {
     [ TransactionStreamAsync ]         [ GatewayClientAsync ]    [ must_be_async ];
     [ TransactionStreamBlocking ]      [ GatewayClientBlocking ] [ must_be_sync ];
 )]
-impl<'a> stream_type<'a> {
+impl stream_type {
     pub fn new(
-        client: &'a client_type,
+        client: &client_type,
         from_state_version: u64,
         limit_per_page: u32,
-    ) -> stream_type<'a> {
+    ) -> stream_type {
         if from_state_version == 0 {
             panic!("from_state_version must be greater than 0");
         }

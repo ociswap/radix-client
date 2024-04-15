@@ -47,7 +47,7 @@ impl client_type {
             opt_ins: None,
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -58,7 +58,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, StateEntityFungiblesPageRequest> {
+impl builder_type<StateEntityFungiblesPageRequest> {
     pub fn aggregation_level(
         &mut self,
         aggregation_level: AggregationLevel,

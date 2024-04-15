@@ -6,6 +6,8 @@ pub mod deserialize;
 #[cfg(feature = "gateway")]
 pub mod gateway;
 
+use std::{rc::Rc, sync::Arc};
+
 use duplicate::duplicate_item;
 use log::trace;
 use maybe_async::{must_be_async, must_be_sync};
@@ -13,39 +15,69 @@ use serde::Serialize;
 
 #[cfg(feature = "gateway")]
 #[duplicate_item(
-    client_type                 reqwest_client_type ;
-    [ GatewayClientAsync ]     [ reqwest::Client ];
-    [ GatewayClientBlocking ]  [ reqwest::blocking::Client ];
+    client_type                reqwest_client_type             smart_pointer;
+    [ GatewayClientAsync ]        [ reqwest::Client ]             [ Arc ];
+    [ GatewayClientBlocking ]     [ reqwest::blocking::Client ]   [ Rc];
 )]
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct client_type {
     pub base_url: String,
-    pub client: reqwest_client_type,
-}
-
-#[cfg(feature = "core")]
-#[duplicate_item(
-    client_type                reqwest_client_type ;
-    [ CoreClientAsync ]        [ reqwest::Client ];
-    [ CoreClientBlocking ]     [ reqwest::blocking::Client ];
-)]
-#[derive(Debug, Clone)]
-pub struct client_type {
-    pub base_url: String,
-    pub client: reqwest_client_type,
+    pub client: smart_pointer<reqwest_client_type>,
 }
 
 #[cfg(feature = "gateway")]
 #[duplicate_item(
-    client_type                reqwest_client_type           maybe_async_attr;
-    [ GatewayClientAsync ]     [ reqwest::Client ]           [ must_be_async ];
-    [ GatewayClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ];
+    client_type                reqwest_client_type           maybe_async_attr    smart_pointer;
+    [ GatewayClientAsync ]     [ reqwest::Client ]           [ must_be_async ]   [ Arc ];
+    [ GatewayClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ]    [ Rc ];
+)]
+impl Clone for client_type {
+    fn clone(&self) -> Self {
+        client_type {
+            base_url: self.base_url.clone(),
+            client: smart_pointer::clone(&self.client),
+        }
+    }
+}
+
+#[cfg(feature = "core")]
+#[duplicate_item(
+    client_type                reqwest_client_type             smart_pointer;
+    [ CoreClientAsync ]        [ reqwest::Client ]             [ Arc ];
+    [ CoreClientBlocking ]     [ reqwest::blocking::Client ]   [ Rc];
+)]
+#[derive(Debug)]
+pub struct client_type {
+    pub base_url: String,
+    pub client: smart_pointer<reqwest_client_type>,
+}
+
+#[cfg(feature = "core")]
+#[duplicate_item(
+    client_type                reqwest_client_type           maybe_async_attr    smart_pointer;
+    [ CoreClientAsync ]     [ reqwest::Client ]           [ must_be_async ]   [ Arc ];
+    [ CoreClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ]    [ Rc ];
+)]
+impl Clone for client_type {
+    fn clone(&self) -> Self {
+        client_type {
+            base_url: self.base_url.clone(),
+            client: smart_pointer::clone(&self.client),
+        }
+    }
+}
+
+#[cfg(feature = "gateway")]
+#[duplicate_item(
+    client_type                reqwest_client_type           maybe_async_attr    smart_pointer;
+    [ GatewayClientAsync ]     [ reqwest::Client ]           [ must_be_async ]   [ Arc ];
+    [ GatewayClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ]    [ Rc ];
 )]
 impl client_type {
     pub fn new(base_url: String) -> client_type {
         client_type {
             base_url,
-            client: reqwest_client_type::new(),
+            client: smart_pointer::new(reqwest_client_type::new()),
         }
     }
 
@@ -72,15 +104,15 @@ impl client_type {
 
 #[cfg(feature = "core")]
 #[duplicate_item(
-    client_type                reqwest_client_type           maybe_async_attr;
-    [ CoreClientAsync ]        [ reqwest::Client ]           [ must_be_async ];
-    [ CoreClientBlocking ]     [ reqwest::blocking::Client ] [ must_be_sync ];
+    client_type                reqwest_client_type           maybe_async_attr    smart_pointer;
+    [ CoreClientAsync ]     [ reqwest::Client ]           [ must_be_async ]   [ Arc ];
+    [ CoreClientBlocking ]  [ reqwest::blocking::Client ] [ must_be_sync ]    [ Rc ];
 )]
 impl client_type {
     pub fn new(base_url: String) -> client_type {
         client_type {
             base_url,
-            client: reqwest_client_type::new(),
+            client: smart_pointer::new(reqwest_client_type::new()),
         }
     }
 
