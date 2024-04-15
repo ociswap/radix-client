@@ -21,6 +21,7 @@ use maybe_async::{must_be_async, must_be_sync};
 pub struct stream_type {
     pub cursor: Option<String>,
     pub builder: builder_type<TransactionStreamRequestBody>,
+    pub last_seen_state_version: u64,
 }
 
 #[duplicate_item(
@@ -48,6 +49,7 @@ impl stream_type {
         stream_type {
             cursor: None,
             builder,
+            last_seen_state_version: from_state_version - 1,
         }
     }
 
@@ -55,13 +57,23 @@ impl stream_type {
     pub async fn next(
         &mut self,
     ) -> Result<TransactionStream200ResponseBody, GatewayApiError> {
-        let response = self.builder.fetch().await?;
+        let mut response = self.builder.fetch().await?;
+
+        response.items = response
+            .items
+            .into_iter()
+            .filter(|item| item.state_version > self.last_seen_state_version)
+            .collect();
 
         let last = response.items.last();
         if let Some(transaction) = last {
-            self.builder
-                .from_state_version(transaction.state_version + 1);
+            self.builder.from_state_version(
+                (transaction.state_version + 1)
+                    .min(response.ledger_state.state_version),
+            );
+            self.last_seen_state_version = transaction.state_version;
         }
+
         Ok(response)
     }
 }
