@@ -23,11 +23,12 @@ pub struct StateEntityDetails200Response {
 pub struct StateEntityDetailsResponseItem {
     pub address: String,
     pub metadata: EntityMetadataCollection,
-    pub fungible_resources: FungibleResourcesCollection,
-    pub non_fungible_resources: NonFungibleResourcesCollection,
-    pub ancestor_identities: StateEntityDetailsResponseItemAncestorIdentities,
-    pub explicit_metadata: EntityMetadataCollection,
-    pub details: StateEntityDetailsResponseItemDetails,
+    pub fungible_resources: Option<FungibleResourcesCollection>,
+    pub non_fungible_resources: Option<NonFungibleResourcesCollection>,
+    pub ancestor_identities:
+        Option<StateEntityDetailsResponseItemAncestorIdentities>,
+    pub explicit_metadata: Option<EntityMetadataCollection>,
+    pub details: Option<StateEntityDetailsResponseItemDetails>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
