@@ -22,13 +22,63 @@ pub struct StateEntityDetails200Response {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StateEntityDetailsResponseItem {
     pub address: String,
-    // Skipping some items here.
     pub fungible_resources: FungibleResourcesCollection,
-    // non_fungible_resources: Vec<NonFungibleResourcesCollection>,
-    // ancestor_identities: Vec<StateEntityDetailsResponseItemAncestorIdentities>,
-    // metadata: EntityMetadataCollection,
-    // explicit_metadata: EntityMetadataCollection,
+    pub non_fungible_resources: NonFungibleResourcesCollection,
+    pub ancestor_identities: StateEntityDetailsResponseItemAncestorIdentities,
+    pub metadata: EntityMetadataCollection,
+    pub explicit_metadata: EntityMetadataCollection,
     pub details: StateEntityDetailsResponseItemDetails,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemAncestorIdentities {
+    pub parent_address: String,
+    pub owner_address: String,
+    pub global_address: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NonFungibleResourcesCollection {
+    pub total_count: Option<u64>,
+    pub next_cursor: Option<String>,
+    pub items: Vec<NonFungibleResourcesCollectionItem>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FungibleResourcesCollectionItem {
+    pub aggregation_level: AggregationLevel,
+    pub resource_address: String,
+    pub explicit_metadata: Option<EntityMetadataCollection>,
+    pub amount: u64,
+    pub last_updated_at_state_version: u64,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NonFungibleResourcesCollectionItem {
+    pub resource_address: String,
+    pub total_count: u64,
+    pub next_cursor: Option<String>,
+    pub items: Vec<NonFungibleResourcesCollectionItemVaultAggregatedVaultItem>,
+}
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct EntityMetadataCollection {
+    pub total_count: Option<u64>,
+    pub next_cursor: Option<String>,
+    pub items: Vec<EntityMetadataItem>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct EntityMetadataItem {
+    pub key: String,
+    pub value: EntityMetadataItemValue,
+    pub is_locked: bool,
+    pub last_updated_at_state_version: u64,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct EntityMetadataItemValue {
+    pub raw_hex: String,
+    pub programmatic_json: serde_json::Value,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
