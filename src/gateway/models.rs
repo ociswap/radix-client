@@ -22,6 +22,7 @@ pub struct StateEntityDetails200Response {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StateEntityDetailsResponseItem {
     pub address: String,
+
     pub fungible_resources: FungibleResourcesCollection,
     pub non_fungible_resources: NonFungibleResourcesCollection,
     pub ancestor_identities: StateEntityDetailsResponseItemAncestorIdentities,
@@ -263,22 +264,6 @@ pub struct StateEntityFungiblesPage200Response {
     pub next_cursor: Option<String>,
     pub items: Vec<FungibleResourcesCollectionItem>,
     pub address: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(tag = "aggregation_level")]
-pub enum FungibleResourcesCollectionItem {
-    Global {
-        resource_address: String,
-        // explicit_metadata: Option<Vec<String>>,
-        amount: Decimal,
-        last_updated_at_state_version: u64,
-    },
-    Vault {
-        resource_address: String,
-        // explicit_metadata: Option<Vec<String>>,
-        vaults: FungibleResourcesCollectionItemVaultAggregatedVault,
-    },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
