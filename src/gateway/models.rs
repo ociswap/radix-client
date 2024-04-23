@@ -42,6 +42,13 @@ pub struct FungibleResourcesCollection {
 #[serde(tag = "type")]
 pub enum StateEntityDetailsResponseItemDetails {
     Component(StateEntityDetailsResponseItemDetailsComponent),
+    FungibleResource(StateEntityDetailsResponseItemDetailsFungibleResource),
+    NonFungibleResource(
+        StateEntityDetailsResponseItemDetailsNonFungibleResource,
+    ),
+    FungibleVault(StateEntityDetailsResponseItemDetailsFungibleVault),
+    NonFungibleVault(StateEntityDetailsResponseItemDetailsNonFungibleVault),
+    Package(StateEntityDetailsResponseItemDetailsPackage),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -50,8 +57,120 @@ pub struct StateEntityDetailsResponseItemDetailsComponent {
     pub blueprint_name: String,
     pub blueprint_version: String,
     pub state: serde_json::Value,
-    // role_assignments: ComponentEntityRoleAssignments,
-    // royalty_vault_balance
+    // Not implemented at this time
+    pub role_assignments: ComponentEntityRoleAssignments,
+    pub royalty_vault_balance: Decimal,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemDetailsFungibleResource {
+    pub divisibility: u8,
+    pub role_assignments: ComponentEntityRoleAssignments,
+    pub total_supply: Decimal,
+    pub total_minted: Decimal,
+    pub total_burned: Decimal,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemDetailsNonFungibleResource {
+    pub role_assignments: ComponentEntityRoleAssignments,
+    pub non_fungible_id_type: NonFungibleIdType,
+    pub total_supply: Decimal,
+    pub total_minted: Decimal,
+    pub total_burned: Decimal,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum NonFungibleIdType {
+    String,
+    Integer,
+    Bytes,
+    Ruid,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemDetailsFungibleVault {
+    pub role_assignments: ComponentEntityRoleAssignments,
+    pub resource_address: String,
+    pub balance: FungibleResourcesCollectionItemVaultAggregatedVaultItem,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemDetailsNonFungibleVault {
+    pub role_assignments: ComponentEntityRoleAssignments,
+    pub resource_address: String,
+    pub balance: NonFungibleResourcesCollectionItemVaultAggregatedVaultItem,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NonFungibleResourcesCollectionItemVaultAggregatedVaultItem {
+    pub total_count: u64,
+    pub next_cursor: Option<String>,
+    pub items: Option<Vec<String>>,
+    pub vault_address: String,
+    pub last_updated_at_state_version: u64,
+}
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponseItemDetailsPackage {
+    pub codes: StateEntityDetailsResponsePackageDetailsCodeCollection,
+    pub vm_type: PackageVmType,
+    pub code_hash_hex: String,
+    pub code_hex: String,
+    pub royalty_vault_balance: Decimal,
+    pub blueprints: StateEntityDetailsResponsePackageDetailsBlueprintCollection,
+    pub schemas: StateEntityDetailsResponsePackageDetailsSchemaCollection,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponsePackageDetailsSchemaCollection {
+    pub total_count: Option<u64>,
+    pub next_cursor: Option<String>,
+    pub items: Vec<StateEntityDetailsResponsePackageDetailsSchemaItem>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponsePackageDetailsSchemaItem {
+    pub schema_hash_hex: String,
+    pub schema_hex: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponsePackageDetailsBlueprintCollection {
+    pub total_count: Option<u64>,
+    pub next_cursor: Option<String>,
+    // todo: implement this
+    pub items: Vec<StateEntityDetailsResponsePackageDetailsBlueprintItem>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponsePackageDetailsBlueprintItem {
+    // pub name: String,
+    // pub version: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StateEntityDetailsResponsePackageDetailsCodeCollection {
+    pub total_count: Option<u64>,
+    pub next_cursor: Option<String>,
+    pub items: Vec<PackageCodeCollectionItem>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PackageCodeCollectionItem {
+    pub vm_type: PackageVmType,
+    pub code_hash_hex: String,
+    pub code_hex: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum PackageVmType {
+    Native,
+    ScryptoV1,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ComponentEntityRoleAssignments {
+    // This type is sadly not implemented at this time.
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
