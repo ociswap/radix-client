@@ -718,7 +718,7 @@ pub struct CommittedTransactionInfo {
     pub state_version: u64,
     pub epoch: u64,
     pub round: u64,
-    pub round_timestamp: String,
+    pub round_timestamp: chrono::DateTime<Utc>,
     pub transaction_status: TransactionStatus,
     pub payload_hash: Option<String>,
     pub intent_hash: Option<String>,
