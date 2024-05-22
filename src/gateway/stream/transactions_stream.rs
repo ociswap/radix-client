@@ -40,7 +40,7 @@ impl client_type {
             ..Default::default()
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -51,7 +51,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, TransactionStreamRequestBody> {
+impl builder_type<TransactionStreamRequestBody> {
     pub fn affected_global_entities_filter(
         &mut self,
         value: Vec<String>,

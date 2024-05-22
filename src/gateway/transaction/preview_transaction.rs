@@ -49,7 +49,7 @@ impl client_type {
             ..Default::default()
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -60,7 +60,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, TransactionPreviewRequestBody> {
+impl builder_type<TransactionPreviewRequestBody> {
     pub fn blobs_hex(mut self, value: Vec<String>) -> Self {
         self.request.blobs_hex = Some(value);
         self

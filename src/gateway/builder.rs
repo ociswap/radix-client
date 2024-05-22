@@ -5,24 +5,24 @@ use crate::{GatewayClientAsync, GatewayClientBlocking};
 /// are implemented on them.
 
 #[derive(Debug, Clone)]
-pub struct RequestBuilderAsync<'a, R> {
-    pub client: &'a GatewayClientAsync,
+pub struct RequestBuilderAsync<R> {
+    pub client: GatewayClientAsync,
     pub request: R,
 }
 
 #[derive(Debug, Clone)]
-pub struct RequestBuilderBlocking<'a, R> {
-    pub client: &'a GatewayClientBlocking,
+pub struct RequestBuilderBlocking<R> {
+    pub client: GatewayClientBlocking,
     pub request: R,
 }
 
-impl<R> RequestBuilderAsync<'_, R> {
+impl<R> RequestBuilderAsync<R> {
     pub fn build(&self) -> &R {
         &self.request
     }
 }
 
-impl<R> RequestBuilderBlocking<'_, R> {
+impl<R> RequestBuilderBlocking<R> {
     pub fn build(&self) -> &R {
         &self.request
     }

@@ -18,9 +18,10 @@ use maybe_async::{must_be_async, must_be_sync};
     [ TransactionStreamBlocking ]   [ RequestBuilderBlocking ];
 )]
 #[derive(Debug)]
-pub struct stream_type<'a> {
+pub struct stream_type {
     pub cursor: Option<String>,
-    pub builder: builder_type<'a, TransactionStreamRequestBody>,
+    pub builder: builder_type<TransactionStreamRequestBody>,
+    pub last_seen_state_version: u64,
 }
 
 #[duplicate_item(
@@ -28,12 +29,12 @@ pub struct stream_type<'a> {
     [ TransactionStreamAsync ]         [ GatewayClientAsync ]    [ must_be_async ];
     [ TransactionStreamBlocking ]      [ GatewayClientBlocking ] [ must_be_sync ];
 )]
-impl<'a> stream_type<'a> {
+impl stream_type {
     pub fn new(
-        client: &'a client_type,
+        client: &client_type,
         from_state_version: u64,
         limit_per_page: u32,
-    ) -> stream_type<'a> {
+    ) -> stream_type {
         if from_state_version == 0 {
             panic!("from_state_version must be greater than 0");
         }
@@ -48,6 +49,7 @@ impl<'a> stream_type<'a> {
         stream_type {
             cursor: None,
             builder,
+            last_seen_state_version: from_state_version - 1,
         }
     }
 
@@ -55,13 +57,23 @@ impl<'a> stream_type<'a> {
     pub async fn next(
         &mut self,
     ) -> Result<TransactionStream200ResponseBody, GatewayApiError> {
-        let response = self.builder.fetch().await?;
+        let mut response = self.builder.fetch().await?;
+
+        response.items = response
+            .items
+            .into_iter()
+            .filter(|item| item.state_version > self.last_seen_state_version)
+            .collect();
 
         let last = response.items.last();
         if let Some(transaction) = last {
-            self.builder
-                .from_state_version(transaction.state_version + 1);
+            self.builder.from_state_version(
+                (transaction.state_version + 1)
+                    .min(response.ledger_state.state_version),
+            );
+            self.last_seen_state_version = transaction.state_version;
         }
+
         Ok(response)
     }
 }

@@ -44,7 +44,7 @@ impl client_type {
             at_ledger_state: None,
         };
         request_type {
-            client: &self,
+            client: self.clone(),
             request,
         }
     }
@@ -55,7 +55,7 @@ impl client_type {
     [ RequestBuilderAsync ] [ must_be_async ];
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
-impl builder_type<'_, StateEntityDetailsRequest> {
+impl builder_type<StateEntityDetailsRequest> {
     pub fn aggregation_level(
         mut self,
         aggregation_level: AggregationLevel,

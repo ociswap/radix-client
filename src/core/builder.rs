@@ -1,24 +1,24 @@
 use crate::{CoreClientAsync, CoreClientBlocking};
 
 #[derive(Debug, Clone)]
-pub struct RequestBuilderAsync<'a, R> {
-    pub client: &'a CoreClientAsync,
+pub struct RequestBuilderAsync<R> {
+    pub client: CoreClientAsync,
     pub request: R,
 }
 
 #[derive(Debug, Clone)]
-pub struct RequestBuilderBlocking<'a, R> {
-    pub client: &'a CoreClientBlocking,
+pub struct RequestBuilderBlocking<R> {
+    pub client: CoreClientBlocking,
     pub request: R,
 }
 
-impl<R> RequestBuilderAsync<'_, R> {
+impl<R> RequestBuilderAsync<R> {
     pub fn build(&self) -> &R {
         &self.request
     }
 }
 
-impl<R> RequestBuilderBlocking<'_, R> {
+impl<R> RequestBuilderBlocking<R> {
     pub fn build(&self) -> &R {
         &self.request
     }
