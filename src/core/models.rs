@@ -41,7 +41,7 @@ pub struct MempoolTransactionHashes {
     pub payload_hash_bech32m: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq, Eq)]
 pub enum PublicKeyType {
     #[default]
     EcdsaSecp256k1,
@@ -95,7 +95,7 @@ pub struct TransactionPreview200ResponseBody {
     pub logs: Vec<Log>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum GatewayErrorType {
     EntityNotFoundError,
     InvalidEntityError,
@@ -178,7 +178,7 @@ pub enum EmitterType {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum ModuleID {
     Main,
     Metadata,
@@ -231,13 +231,13 @@ pub struct SborData {
     pub programmatic_json: Option<serde_json::Value>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum LocalTypeIdKind {
     WellKnown,
     SchemaLocal,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum EventEmitterIdentifierType {
     Function,
     Method,
@@ -269,7 +269,7 @@ pub struct EntityReference {
     pub entity_address: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum EntityType {
     GlobalPackage,
     GlobalConsensusManager,
