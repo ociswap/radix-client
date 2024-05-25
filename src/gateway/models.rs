@@ -131,7 +131,7 @@ pub struct StateEntityDetailsResponseItemDetailsNonFungibleResource {
     pub total_burned: Decimal,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum NonFungibleIdType {
     String,
     Integer,
@@ -213,7 +213,7 @@ pub struct PackageCodeCollectionItem {
     pub code_hex: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum PackageVmType {
     Native,
     ScryptoV1,
@@ -238,7 +238,7 @@ pub struct StateEntityFungiblesPageRequest {
     pub opt_ins: Option<StateEntityFungiblesPageRequestOptIns>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum AggregationLevel {
     Global,
     Vault,
@@ -295,7 +295,7 @@ pub struct LedgerState {
     pub round: u64,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum PublicKeyType {
     EcdsaSecp256k1,
     EddsaEd25519,
@@ -427,7 +427,7 @@ pub enum EventEmitterIdentifier {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum ModuleId {
     Main,
     Metadata,
@@ -460,13 +460,13 @@ pub struct SborData {
     pub programmatic_json: Option<serde_json::Value>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum LocalTypeIdKind {
     WellKnown,
     SchemaLocal,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum EventEmitterIdentifierType {
     Function,
     Method,
@@ -490,7 +490,7 @@ pub struct EntityReference {
     pub entity_address: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub enum EntityType {
     GlobalPackage,
     GlobalConsensusManager,
@@ -677,14 +677,14 @@ impl Default for TransactionStreamRequestBody {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum TransactionKindFilter {
     User,
     EpochChange,
     All,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum Order {
     Asc,
     Desc,
@@ -739,7 +739,7 @@ pub struct CommittedTransactionInfo {
     // pub balance_changes: Option<Vec<TransactionBalanceChanges>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(tag = "type")]
 pub enum TransactionMessage {
     Plaintext {
@@ -749,18 +749,17 @@ pub enum TransactionMessage {
     // didn't need this.
     // Encrypted(
     //     ecrypted_hex: String,
-
     // ),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(tag = "type")]
 pub enum PlaintextMessageContent {
     String { value: String },
     Binary { value_hex: String },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum TransactionStatus {
     Unknown,
     CommittedSuccess,
@@ -769,7 +768,7 @@ pub enum TransactionStatus {
     Rejected,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum ManifestClass {
     General,
     Transfer,
