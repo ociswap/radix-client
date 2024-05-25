@@ -18,23 +18,22 @@ where
     match status {
         reqwest::StatusCode::OK => {
             Ok(from_str(&text).map_err(|err| CoreApiError::Parsing {
-                response: err.path().to_string(),
-                serde_error: err.into_inner(),
+                response: text.clone(),
+                serde_error: err,
             })?)
         }
         status if status.is_server_error() => Err(CoreApiError::ServerError(
             from_str(&text).map_err(|err| CoreApiError::Parsing {
-                response: err.path().to_string(),
-                serde_error: err.into_inner(),
+                response: text.clone(),
+                serde_error: err,
             })?,
         )),
         status if status.is_client_error() => {
-            let body = serde_json::from_str(&text).map_err(|err| {
-                CoreApiError::Parsing {
-                    serde_error: err,
+            let body =
+                from_str(&text).map_err(|err| CoreApiError::Parsing {
                     response: text.clone(),
-                }
-            })?;
+                    serde_error: err,
+                })?;
             Err(CoreApiError::ClientError(body))
         }
         _ => Err(CoreApiError::Unknown),

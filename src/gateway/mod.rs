@@ -6,6 +6,8 @@ pub mod status;
 pub mod stream;
 pub mod transaction;
 
+use crate::deserialize::from_str;
+
 use self::error::GatewayApiError;
 
 pub fn match_response<T>(
@@ -17,29 +19,26 @@ where
 {
     match status {
         reqwest::StatusCode::OK => {
-            Ok(serde_json::from_str(&text).map_err(|err| {
-                GatewayApiError::Parsing {
-                    serde_error: err,
-                    response: text.clone(),
-                }
+            Ok(from_str(&text).map_err(|err| GatewayApiError::Parsing {
+                serde_error: err,
+                response: text.clone(),
             })?)
         }
-        status if status.is_server_error() => Err(
-            GatewayApiError::ServerError(serde_json::from_str(&text).map_err(
+        status if status.is_server_error() => {
+            Err(GatewayApiError::ServerError(from_str(&text).map_err(
                 |err| GatewayApiError::Parsing {
                     serde_error: err,
                     response: text.clone(),
                 },
-            )?),
-        ),
+            )?))
+        }
         status if status.is_client_error() => {
-            let body = serde_json::from_str(&text).map_err(|err| {
-                GatewayApiError::Parsing {
+            Err(GatewayApiError::ClientError(from_str(&text).map_err(
+                |err| GatewayApiError::Parsing {
                     serde_error: err,
                     response: text.clone(),
-                }
-            })?;
-            Err(GatewayApiError::ClientError(body))
+                },
+            )?))
         }
         _ => Err(GatewayApiError::Unknown),
     }
