@@ -29,7 +29,7 @@ pub struct ErrorData<T> {
 pub enum CoreApiError {
     Network(reqwest::Error),
     Parsing {
-        serde_error: serde_json::Error,
+        serde_error: serde_path_to_error::Error<serde_json::Error>,
         response: String,
     },
     ClientError(CoreApiErrorResponse),
@@ -46,9 +46,8 @@ impl std::fmt::Display for CoreApiError {
                 response,
             } => write!(
                 f,
-                "Parsing error: {}: Path to wrong field: {:#?}",
-                serde_error,
-                response.chars().take(1000).collect::<String>().to_string()
+                "Parsing error: {}:\nResponse: {:#?}",
+                serde_error, response
             ),
             CoreApiError::ClientError(e) => {
                 write!(f, "Client error: {:?}", e)

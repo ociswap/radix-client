@@ -25,7 +25,7 @@ pub struct GatewayApiErrorResponse {
 pub enum GatewayApiError {
     Network(reqwest::Error),
     Parsing {
-        serde_error: serde_json::Error,
+        serde_error: serde_path_to_error::Error<serde_json::Error>,
         response: String,
     },
     ClientError(GatewayApiErrorResponse),
@@ -42,9 +42,8 @@ impl std::fmt::Display for GatewayApiError {
                 response,
             } => write!(
                 f,
-                "Parsing error: {}: Path to wrong field: {:#?}",
-                serde_error,
-                response.chars().take(1000).collect::<String>().to_string()
+                "Parsing error: {}:\nResponse: {}",
+                serde_error, response
             ),
             GatewayApiError::ClientError(e) => {
                 write!(f, "Client error: {:?}", e)

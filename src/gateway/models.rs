@@ -723,7 +723,7 @@ pub struct CommittedTransactionInfo {
     pub payload_hash: Option<String>,
     pub intent_hash: Option<String>,
     pub fee_paid: Option<Decimal>,
-    pub affected_global_entities: Option<Vec<EntityReference>>,
+    pub affected_global_entities: Option<Vec<String>>,
     pub confirmed_at: Option<chrono::DateTime<Utc>>,
     pub error_message: Option<String>,
     pub raw_hex: Option<String>,
