@@ -107,10 +107,10 @@ pub struct StateEntityDetailsResponseItemDetailsComponent {
     pub package_address: Option<String>,
     pub blueprint_name: String,
     pub blueprint_version: String,
-    pub state: serde_json::Value,
+    pub state: Option<serde_json::Value>,
     // Not implemented at this time
-    pub role_assignments: ComponentEntityRoleAssignments,
-    pub royalty_vault_balance: Decimal,
+    pub role_assignments: Option<ComponentEntityRoleAssignments>,
+    pub royalty_vault_balance: Option<Decimal>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -167,9 +167,11 @@ pub struct StateEntityDetailsResponseItemDetailsPackage {
     pub vm_type: PackageVmType,
     pub code_hash_hex: String,
     pub code_hex: String,
-    pub royalty_vault_balance: Decimal,
-    pub blueprints: StateEntityDetailsResponsePackageDetailsBlueprintCollection,
-    pub schemas: StateEntityDetailsResponsePackageDetailsSchemaCollection,
+    pub royalty_vault_balance: Option<Decimal>,
+    pub blueprints:
+        Option<StateEntityDetailsResponsePackageDetailsBlueprintCollection>,
+    pub schemas:
+        Option<StateEntityDetailsResponsePackageDetailsSchemaCollection>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
