@@ -404,8 +404,7 @@ pub struct EcdsaSecp256k1PublicKey {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Event {
-    pub name: Option<String>,
-    pub emitter: EventEmitterIdentifier,
+    pub r#type: EventTypeIdentifier,
     pub data: Value,
 }
 
