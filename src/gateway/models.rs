@@ -764,8 +764,8 @@ pub enum PlaintextMessageContent {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum TransactionStatus {
     Unknown,
-    CommittedSuccess,
-    CommittedFailure,
+    Succeeded,
+    Failure,
     Pending,
     Rejected,
 }
