@@ -37,7 +37,7 @@ impl client_type {
         manifest: String,
         start_epoch_inclusive: i64,
         end_epoch_exclusive: i64,
-        nonce: String,
+        nonce: i64,
         signer_public_keys: Vec<PublicKey>,
     ) -> request_type<TransactionPreviewRequestBody> {
         let request = TransactionPreviewRequestBody {

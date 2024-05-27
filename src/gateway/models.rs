@@ -336,7 +336,7 @@ pub struct TransactionPreviewRequestBody {
     pub notary_public_key: Option<PublicKey>,
     pub notary_is_signatory: Option<bool>,
     pub tip_percentage: i32,
-    pub nonce: String,
+    pub nonce: i64,
     pub signer_public_keys: Vec<PublicKey>,
     pub flags: PreviewTransactionFlags,
 }
