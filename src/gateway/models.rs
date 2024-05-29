@@ -764,7 +764,7 @@ pub enum PlaintextMessageContent {
 pub enum TransactionStatus {
     Unknown,
     Succeeded,
-    Failure,
+    Failed,
     Pending,
     Rejected,
 }
