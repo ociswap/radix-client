@@ -344,7 +344,7 @@ pub struct TransactionPreviewRequestBody {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionPreview200ResponseBody {
     pub encoded_receipt: String,
-    pub receipt: Receipt,
+    pub receipt: PreviewReceipt,
     pub resource_changes: Vec<InstructionResourceChanges>,
     pub logs: Vec<Log>,
 }
@@ -370,7 +370,21 @@ pub struct Log {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Receipt {
+pub struct StreamReceipt {
+    pub status: Option<StreamTransactionStatus>,
+    pub fee_summary: Option<FeeSummary>,
+    pub costing_parameters: Option<CostingParameters>,
+    pub fee_source: Option<FeeSource>,
+    pub fee_destination: Option<FeeDestination>,
+    pub state_updates: Option<StateUpdates>,
+    pub events: Option<Vec<Event>>,
+    pub next_epoch: Option<NextEpoch>,
+    pub output: Option<Vec<SborData>>,
+    pub error_message: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PreviewReceipt {
     pub status: Option<PreviewTransactionStatus>,
     pub fee_summary: Option<FeeSummary>,
     pub costing_parameters: Option<CostingParameters>,
@@ -728,7 +742,7 @@ pub struct CommittedTransactionInfo {
     pub confirmed_at: Option<chrono::DateTime<Utc>>,
     pub error_message: Option<String>,
     pub raw_hex: Option<String>,
-    pub receipt: Option<Receipt>,
+    pub receipt: Option<StreamReceipt>,
     pub manifest_instructions: Option<String>,
     // A collection of zero or more manifest
     // classes ordered from the most specific
