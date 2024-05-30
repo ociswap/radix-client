@@ -371,7 +371,7 @@ pub struct Log {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Receipt {
-    pub status: Option<TransactionStatus>,
+    pub status: Option<PreviewTransactionStatus>,
     pub fee_summary: Option<FeeSummary>,
     pub costing_parameters: Option<CostingParameters>,
     pub fee_source: Option<FeeSource>,
@@ -720,7 +720,7 @@ pub struct CommittedTransactionInfo {
     pub epoch: u64,
     pub round: u64,
     pub round_timestamp: chrono::DateTime<Utc>,
-    pub transaction_status: TransactionStatus,
+    pub transaction_status: StreamTransactionStatus,
     pub payload_hash: Option<String>,
     pub intent_hash: Option<String>,
     pub fee_paid: Option<Decimal>,
@@ -761,10 +761,19 @@ pub enum PlaintextMessageContent {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-pub enum TransactionStatus {
+pub enum PreviewTransactionStatus {
     Unknown,
     Succeeded,
     Failed,
+    Pending,
+    Rejected,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+pub enum StreamTransactionStatus {
+    Unknown,
+    CommittedSuccess,
+    CommittedFailure,
     Pending,
     Rejected,
 }
