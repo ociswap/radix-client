@@ -305,6 +305,8 @@ mod tests {
             .order(crate::gateway::stream::transactions_stream::Order::Asc)
             .limit_per_page(1)
             .with_raw_hex()
+            .from_state_version(10_000_000)
+            .with_receipt_events()
             .fetch()
             .unwrap();
         println!("{response:?}");

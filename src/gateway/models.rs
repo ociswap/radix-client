@@ -377,7 +377,7 @@ pub struct StreamReceipt {
     pub fee_source: Option<FeeSource>,
     pub fee_destination: Option<FeeDestination>,
     pub state_updates: Option<StateUpdates>,
-    pub events: Option<Vec<Event>>,
+    pub events: Option<Vec<StreamEvent>>,
     pub next_epoch: Option<NextEpoch>,
     pub output: Option<Vec<SborData>>,
     pub error_message: Option<String>,
@@ -391,7 +391,7 @@ pub struct PreviewReceipt {
     pub fee_source: Option<FeeSource>,
     pub fee_destination: Option<FeeDestination>,
     pub state_updates: Option<StateUpdates>,
-    pub events: Option<Vec<Event>>,
+    pub events: Option<Vec<PreviewEvent>>,
     pub next_epoch: Option<NextEpoch>,
     pub output: Option<Vec<SborData>>,
     pub error_message: Option<String>,
@@ -417,9 +417,15 @@ pub struct EcdsaSecp256k1PublicKey {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Event {
+pub struct PreviewEvent {
     pub r#type: EventTypeIdentifier,
     pub data: Value,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StreamEvent {
+    pub emitter: EventEmitterIdentifier,
+    pub name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
