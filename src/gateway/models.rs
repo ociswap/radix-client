@@ -515,6 +515,7 @@ pub enum EntityType {
     GlobalTwoResourcePool,
     GlobalMultiResourcePool,
     GlobalTransactionTracker,
+    GlobalAccountLocker,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
