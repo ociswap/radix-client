@@ -5,8 +5,8 @@ use maybe_async::*;
 
 #[duplicate_item(
     client_type                 maybe_async_attr ;
-    [ GatewayClientAsync ]     [ must_be_async ];
-    [ GatewayClientBlocking ]  [ must_be_sync ];
+    [ CoreClientAsync ]     [ must_be_async ];
+    [ CoreClientBlocking ]  [ must_be_sync ];
   )]
 impl client_type {
     #[maybe_async_attr]
