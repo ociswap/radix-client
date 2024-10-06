@@ -74,7 +74,8 @@ impl stream_type {
         let last = response.transactions.last();
         if let Some(transaction) = last {
             self.builder.from_state_version(
-                transaction.resultant_state_identifiers.state_version + 1,
+                (transaction.resultant_state_identifiers.state_version + 1)
+                    .min(response.max_ledger_state_version),
             );
             self.last_seen_state_version =
                 transaction.resultant_state_identifiers.state_version;
