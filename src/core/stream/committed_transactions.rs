@@ -18,23 +18,11 @@ impl client_type {
     pub async fn committed_transactions(
         &self,
         request: GetCommittedTransactionsRequest,
-    ) -> Result<GetCommittedTransactionsRequest, CoreApiError> {
+    ) -> Result<GetCommittedTransactions200ResponseBody, CoreApiError> {
         let (text, status) = self.post("stream/transactions", request).await?;
         match_response(text, status)
     }
 }
-
-// pub struct GetCommittedTransactionsRequest {
-//     pub network: String,
-//     pub from_state_version: u64,
-//     pub limit: u32,
-//     pub sbor_format_options: Option<SborFormatOptions>,
-//     pub transaction_format_options: Option<TransactionFormatOptions>,
-//     pub substate_format_options: Option<SubstateFormatOptions>,
-//     pub include_proofs: Option<bool>,
-// }
-
-// builder
 
 #[duplicate_item(
     request_type client_type ;
@@ -99,9 +87,24 @@ impl builder_type<GetCommittedTransactionsRequest> {
     #[maybe_async_attr]
     pub async fn fetch(
         &self,
-    ) -> Result<GetCommittedTransactionsRequest, CoreApiError> {
+    ) -> Result<GetCommittedTransactions200ResponseBody, CoreApiError> {
         self.client
             .committed_transactions(self.request.clone())
             .await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+    use constants::PUBLIC_GATEWAY_URL;
+
+    #[test]
+    fn simple() {
+        let client = CoreClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
+        let response = client
+            .committed_transactions_builder("main".to_string(), 0, 10)
+            .fetch();
+        println!("{:#?}", response);
     }
 }

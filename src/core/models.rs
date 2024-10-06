@@ -383,13 +383,12 @@ pub struct SubstateFormatOptions {
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
-pub struct TransactionStream200ResponseBody {
-    // pub previous_state_identifier: Option<CommittedStateIdentifier>,
-    pub from_state_version: Option<u64>,
+pub struct GetCommittedTransactions200ResponseBody {
+    pub previous_state_identifier: Option<CommittedStateIdentifier>,
+    pub from_state_version: u64,
     pub count: u32,
     pub max_ledger_state_version: u64,
     pub transactions: Vec<CommittedTransaction>,
-    // pub proofs: Option<Vec<LedgerProof>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
