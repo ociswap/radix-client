@@ -105,6 +105,7 @@ impl builder_type<GetCommittedTransactionsRequest> {
 
 #[cfg(test)]
 mod tests {
+    use crate::core::models::TransactionFormatOptions;
     use crate::*;
     use constants::PUBLIC_CORE_URL;
 
@@ -114,6 +115,10 @@ mod tests {
         let response = client
             .committed_transactions_builder()
             .from_state_version(1000000)
+            .transaction_format_options(TransactionFormatOptions {
+                balance_changes: true,
+                ..Default::default()
+            })
             .fetch()
             .unwrap();
         println!("{:#?}", response);

@@ -383,6 +383,7 @@ pub struct TransactionFormatOptions {
     pub manifest: bool,
     pub blobs: bool,
     pub message: bool,
+    pub balance_changes: bool,
     pub raw_system_transaction: bool,
     pub raw_notarized_transaction: bool,
     pub raw_ledger_transaction: bool,
@@ -411,6 +412,33 @@ pub struct CommittedTransaction {
     pub ledger_transaction: LedgerTransactionType,
     pub receipt: Receipt,
     pub proposer_timestamp_ms: u64,
+    pub balance_changes: Option<CommittedTransactionBalanceChanges>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CommittedTransactionBalanceChanges {
+    fungible_entity_balance_changes: Vec<EntityFungibleBalanceChanges>,
+    non_fungible_entity_balance_changes: Vec<EntityNonFungibleBalanceChanges>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EntityFungibleBalanceChanges {
+    entity_address: String,
+    non_fee_balance_changes: Vec<FungibleBalanceChange>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FungibleBalanceChange {
+    resource_address: String,
+    balance_change: Decimal,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EntityNonFungibleBalanceChanges {
+    entity_address: String,
+    resource_address: String,
+    added: Vec<String>,
+    removed: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
