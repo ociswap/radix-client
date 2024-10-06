@@ -347,7 +347,7 @@ pub struct TransactionSubmitRequestBody {
     pub notarized_transaction_hex: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GetCommittedTransactionsRequest {
     pub network: String,
     pub from_state_version: u64,
@@ -356,6 +356,20 @@ pub struct GetCommittedTransactionsRequest {
     pub transaction_format_options: Option<TransactionFormatOptions>,
     pub substate_format_options: Option<SubstateFormatOptions>,
     pub include_proofs: Option<bool>,
+}
+
+impl Default for GetCommittedTransactionsRequest {
+    fn default() -> Self {
+        GetCommittedTransactionsRequest {
+            network: "mainnet".to_string(),
+            from_state_version: 100,
+            limit: 100,
+            sbor_format_options: None,
+            transaction_format_options: None,
+            substate_format_options: None,
+            include_proofs: None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]

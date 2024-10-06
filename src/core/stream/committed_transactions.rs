@@ -32,14 +32,8 @@ impl client_type {
 impl client_type {
     pub fn committed_transactions_builder(
         &self,
-        network: String,
-        from_state_version: u64,
-        limit: u32,
     ) -> request_type<GetCommittedTransactionsRequest> {
         let request = GetCommittedTransactionsRequest {
-            network,
-            from_state_version,
-            limit,
             ..Default::default()
         };
         request_type {
@@ -55,6 +49,21 @@ impl client_type {
     [ RequestBuilderBlocking ] [ must_be_sync ];
 )]
 impl builder_type<GetCommittedTransactionsRequest> {
+    pub fn network(&mut self, value: String) -> &mut Self {
+        self.request.network = value;
+        self
+    }
+
+    pub fn limit(&mut self, value: u32) -> &mut Self {
+        self.request.limit = value;
+        self
+    }
+
+    pub fn from_state_version(&mut self, value: u64) -> &mut Self {
+        self.request.from_state_version = value;
+        self
+    }
+
     pub fn sbor_format_options(
         &mut self,
         value: SborFormatOptions,
@@ -97,14 +106,16 @@ impl builder_type<GetCommittedTransactionsRequest> {
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use constants::PUBLIC_GATEWAY_URL;
+    use constants::PUBLIC_CORE_URL;
 
     #[test]
     fn simple() {
-        let client = CoreClientBlocking::new(PUBLIC_GATEWAY_URL.to_string());
+        let client = CoreClientBlocking::new(PUBLIC_CORE_URL.to_string());
         let response = client
-            .committed_transactions_builder("main".to_string(), 0, 10)
-            .fetch();
+            .committed_transactions_builder()
+            .from_state_version(1000000)
+            .fetch()
+            .unwrap();
         println!("{:#?}", response);
     }
 }
