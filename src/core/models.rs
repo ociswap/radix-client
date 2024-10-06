@@ -417,28 +417,29 @@ pub struct CommittedTransaction {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CommittedTransactionBalanceChanges {
-    fungible_entity_balance_changes: Vec<EntityFungibleBalanceChanges>,
-    non_fungible_entity_balance_changes: Vec<EntityNonFungibleBalanceChanges>,
+    pub fungible_entity_balance_changes: Vec<EntityFungibleBalanceChanges>,
+    pub non_fungible_entity_balance_changes:
+        Vec<EntityNonFungibleBalanceChanges>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EntityFungibleBalanceChanges {
-    entity_address: String,
-    non_fee_balance_changes: Vec<FungibleBalanceChange>,
+    pub entity_address: String,
+    pub non_fee_balance_changes: Vec<FungibleBalanceChange>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FungibleBalanceChange {
-    resource_address: String,
-    balance_change: Decimal,
+    pub resource_address: String,
+    pub balance_change: Decimal,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EntityNonFungibleBalanceChanges {
-    entity_address: String,
-    resource_address: String,
-    added: Vec<String>,
-    removed: Vec<String>,
+    pub entity_address: String,
+    pub resource_address: String,
+    pub added: Vec<String>,
+    pub removed: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
