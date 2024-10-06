@@ -35,6 +35,8 @@ impl stream_type {
         network: String,
         from_state_version: u64,
         limit_per_page: u32,
+        transaction_format_options: TransactionFormatOptions,
+        sbor_format_options: SborFormatOptions,
     ) -> stream_type {
         if from_state_version == 0 {
             panic!("from_state_version must be greater than 0");
@@ -42,6 +44,8 @@ impl stream_type {
         let builder = client
             .committed_transactions_builder()
             .network(network)
+            .transaction_format_options(transaction_format_options)
+            .sbor_format_options(sbor_format_options)
             .limit(limit_per_page)
             .from_state_version(from_state_version)
             .clone();
@@ -91,8 +95,17 @@ impl client_type {
         network: String,
         from_state_version: u64,
         limit_per_page: u32,
+        transaction_format_options: TransactionFormatOptions,
+        sbor_format_options: SborFormatOptions,
     ) -> stream_type {
-        stream_type::new(&self, network, from_state_version, limit_per_page)
+        stream_type::new(
+            &self,
+            network,
+            from_state_version,
+            limit_per_page,
+            transaction_format_options,
+            sbor_format_options,
+        )
     }
 }
 
@@ -106,8 +119,16 @@ mod tests {
     #[test]
     fn test_30_transactions() {
         let client = CoreClientBlocking::new(PUBLIC_CORE_URL.to_string());
-        let mut stream =
-            client.new_transaction_stream("mainnet".to_string(), 1000000, 3);
+        let mut stream = client.new_transaction_stream(
+            "mainnet".to_string(),
+            1000000,
+            3,
+            TransactionFormatOptions {
+                balance_changes: true,
+                ..Default::default()
+            },
+            Default::default(),
+        );
 
         let mut count = 0;
         for _ in 0..10 {
