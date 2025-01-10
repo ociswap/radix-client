@@ -45,6 +45,7 @@ impl stream_type {
             .kind_filter(TransactionKindFilter::User)
             .limit_per_page(limit_per_page)
             .with_receipt_events()
+            .with_affected_global_entities()
             .clone();
         stream_type {
             cursor: None,
