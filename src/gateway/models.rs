@@ -50,7 +50,7 @@ pub struct FungibleResourcesCollectionItem {
     pub aggregation_level: AggregationLevel,
     pub resource_address: String,
     pub explicit_metadata: Option<EntityMetadataCollection>,
-    pub amount: u64,
+    pub amount: Decimal,
     pub last_updated_at_state_version: u64,
 }
 
