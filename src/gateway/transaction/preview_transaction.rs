@@ -96,6 +96,11 @@ impl builder_type<TransactionPreviewRequestBody> {
         self
     }
 
+    pub fn disable_auth_checks(mut self) -> Self {
+        self.request.flags.disable_auth_checks = true;
+        self
+    }
+
     #[maybe_async_attr]
     pub async fn fetch(
         self,

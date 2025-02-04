@@ -315,6 +315,7 @@ pub struct PreviewTransactionFlags {
     pub use_free_credit: bool,
     pub assume_all_signature_proofs: bool,
     pub skip_epoch_check: bool,
+    pub disable_auth_checks: bool,
 }
 
 impl Default for PreviewTransactionFlags {
@@ -323,6 +324,7 @@ impl Default for PreviewTransactionFlags {
             use_free_credit: false,
             assume_all_signature_proofs: false,
             skip_epoch_check: false,
+            disable_auth_checks: false,
         }
     }
 }
