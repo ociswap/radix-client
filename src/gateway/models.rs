@@ -5,6 +5,8 @@ use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::core::models::Receipt as CoreReceipt;
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StateEntityDetailsRequest {
     pub at_ledger_state: Option<LedgerStateSelector>,
@@ -346,7 +348,7 @@ pub struct TransactionPreviewRequestBody {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TransactionPreview200ResponseBody {
     pub encoded_receipt: String,
-    pub receipt: Receipt,
+    pub receipt: CoreReceipt,
     pub resource_changes: Vec<InstructionResourceChanges>,
     pub logs: Vec<Log>,
 }
