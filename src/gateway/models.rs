@@ -59,7 +59,7 @@ pub struct FungibleResourcesCollectionItem {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NonFungibleResourcesCollectionItem {
     pub resource_address: String,
-    pub total_count: u64,
+    pub amount: u64,
     pub next_cursor: Option<String>,
     pub items: Vec<NonFungibleResourcesCollectionItemVaultAggregatedVaultItem>,
 }
