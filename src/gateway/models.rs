@@ -57,12 +57,30 @@ pub struct FungibleResourcesCollectionItem {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct NonFungibleResourcesCollectionItem {
-    pub resource_address: String,
-    pub amount: u64,
-    pub next_cursor: Option<String>,
-    pub items: Vec<NonFungibleResourcesCollectionItemVaultAggregatedVaultItem>,
+#[serde(tag = "aggregation_level")]
+pub enum NonFungibleResourcesCollectionItem {
+    Global {
+        resource_address: String,
+        explicit_metadata: Option<EntityMetadataCollection>,
+        amount: u64,
+        last_updated_at_state_version: u64,
+    },
+    Vault {
+        resource_address: String,
+        explicit_metadata: Option<EntityMetadataCollection>,
+        vaults: Vec<NonFungibleResourcesCollectionItemVaultAggregatedVault>,
+    },
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NonFungibleResourcesCollectionItemVaultAggregatedVault {
+    total_count: u64,
+    next_cursor: Option<String>,
+    items: Option<Vec<String>>,
+    vault_address: String,
+    last_updated_at_state_version: u64,
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct EntityMetadataCollection {
     pub total_count: Option<u64>,
@@ -163,6 +181,7 @@ pub struct NonFungibleResourcesCollectionItemVaultAggregatedVaultItem {
     pub vault_address: String,
     pub last_updated_at_state_version: u64,
 }
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StateEntityDetailsResponseItemDetailsPackage {
     pub codes: StateEntityDetailsResponsePackageDetailsCodeCollection,
